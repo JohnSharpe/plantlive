@@ -1,0 +1,21 @@
+#Class Files #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.tar
+*.zip
+
+**/target
+**/.project
+**/.classpath
+**/.metadata
+**/.settings
+**/Open Notebook.onetoc2
+.idea/
+*.iml
+**/.idea/
+.DS_Store
+dependency-reduced-pom.xml
