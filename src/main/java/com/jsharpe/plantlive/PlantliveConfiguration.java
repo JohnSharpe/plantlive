@@ -32,9 +32,11 @@ public class PlantliveConfiguration extends Configuration {
     public void initialise(final Environment environment) {
 
         final RepositoryWrapper repositories = this.persistenceFactory.get(environment);
+
         // TODO Consider passing the necessary repositories explicitly
         // TODO Also consider a ReadRepository and a WriteRepository for both entity types
         // TODO e.g. the inFactory doesn't actually write to Plants or read from Details
+
         this.inFactory.initialise(environment, repositories);
         this.outFactory.initialise(environment, repositories);
 

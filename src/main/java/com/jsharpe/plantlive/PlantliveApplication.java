@@ -21,8 +21,8 @@ public class PlantliveApplication extends Application<PlantliveConfiguration> {
     }
 
     @Override
-    public void run(final PlantliveConfiguration plantliveConfiguration, final Environment environment) {
-
+    public void run(final PlantliveConfiguration configuration, final Environment environment) {
+        configuration.initialise(environment);
     }
 
 }
