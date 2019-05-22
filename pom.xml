@@ -13,6 +13,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <dropwizard.version>1.3.11</dropwizard.version>
+
+        <surefire.version>3.0.0-M3</surefire.version>
     </properties>
 
     <dependencies>
@@ -23,10 +25,49 @@
             <version>${dropwizard.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-testing</artifactId>
+            <version>${dropwizard.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+
+            <!-- Bind UnitTests to the test phase, Integration- and LoadTests to the integration-test phase -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <groups>com.jsharpe.plantlive.UnitTest</groups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>com.jsharpe.plantlive.IntegrationTest</groups>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>load</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>com.jsharpe.plantlive.LoadTest</groups>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- The Dropwizard-blessed way of versioning jars -->
             <plugin>
