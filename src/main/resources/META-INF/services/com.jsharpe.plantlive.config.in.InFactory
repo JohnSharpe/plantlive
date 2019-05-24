@@ -1,1 +1,2 @@
 com.jsharpe.plantlive.config.in.NopInFactory
+com.jsharpe.plantlive.config.in.RabbitInFactory
