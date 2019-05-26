@@ -16,6 +16,27 @@ import javax.validation.constraints.NotNull;
 public class RabbitInFactory implements InFactory {
 
     // TODO Rabbit-specific configuration here
+    @Valid
+    @NotNull
+    private final String host;
+
+    @Valid
+    @NotNull
+    private final Integer port;
+
+    @Valid
+    @NotNull
+    private final String username;
+
+    @Valid
+    @NotNull
+    private final String password;
+
+    private final String vhost;
+
+    @Valid
+    @NotNull
+    private final String queue;
 
     @Valid
     @NotNull
@@ -25,7 +46,21 @@ public class RabbitInFactory implements InFactory {
     // TODO Any other consumer configuration here
 
     @JsonCreator
-    public RabbitInFactory(@JsonProperty("retentionHours") Integer retentionHours) {
+    public RabbitInFactory(
+            @JsonProperty("host") String host,
+            @JsonProperty("port") Integer port,
+            @JsonProperty("username") String username,
+            @JsonProperty("password") String password,
+            @JsonProperty("vhost") String vhost,
+            @JsonProperty("queue") String queue,
+            @JsonProperty("retentionHours") Integer retentionHours
+    ) {
+        this.host = host;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+        this.vhost = vhost;
+        this.queue = queue;
         this.retentionHours = retentionHours;
     }
 
@@ -38,7 +73,16 @@ public class RabbitInFactory implements InFactory {
                 this.retentionHours
         );
 
-        final RabbitConsumer rabbitConsumer = new RabbitConsumer(inService);
+        final RabbitConsumer rabbitConsumer = new RabbitConsumer(
+                inService,
+                this.host,
+                this.port,
+                this.username,
+                this.password,
+                this.vhost,
+                this.queue
+        );
+
         // TODO Get a healthcheck in here!
         environment.lifecycle().manage(rabbitConsumer);
     }

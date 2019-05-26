@@ -25,4 +25,9 @@ public class MockDetailRepository implements DetailRepository {
         return details;
     }
 
+    public void clear() {
+        this.details.clear();
+        this.lastId.set(0);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.jsharpe.plantlive.consume;
 
+import com.jsharpe.plantlive.UnitTest;
 import com.jsharpe.plantlive.exceptions.ConsumeException;
 import com.jsharpe.plantlive.exceptions.IllegalPasswordException;
 import com.jsharpe.plantlive.models.Detail;
@@ -9,10 +10,12 @@ import com.jsharpe.plantlive.repositories.detail.NopDetailRepository;
 import com.jsharpe.plantlive.repositories.plant.NopPlantRepository;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Date;
 import java.util.Set;
 
+@Category(UnitTest.class)
 public class InServiceTest {
 
     @Test(expected = ConsumeException.class)
@@ -74,7 +77,7 @@ public class InServiceTest {
                 1,
                 password,
                 new Date(),
-                -30,
+                -300,
                 20,
                 30,
                 40

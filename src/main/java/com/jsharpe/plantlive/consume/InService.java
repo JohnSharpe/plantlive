@@ -84,6 +84,7 @@ public class InService {
 
     // TODO This could do with being pulled out and unit tested, it is likely to change
     // TODO Also, different verification is likely to take place on the different numbers...
+    // TODO e.g temperature probably won't be 0 to infinity
     private boolean verify(int candidate) {
         return candidate >= 0;
     }

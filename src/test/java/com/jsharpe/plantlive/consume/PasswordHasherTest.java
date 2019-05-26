@@ -1,9 +1,12 @@
 package com.jsharpe.plantlive.consume;
 
+import com.jsharpe.plantlive.UnitTest;
 import com.jsharpe.plantlive.exceptions.IllegalPasswordException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category(UnitTest.class)
 public class PasswordHasherTest {
 
     @Test(expected = IllegalPasswordException.class)

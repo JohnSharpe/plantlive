@@ -38,4 +38,9 @@ public class MockPlantRepository implements PlantRepository {
         return 1;
     }
 
+    public void clear() {
+        this.plants.clear();
+        this.lastId.set(0);
+    }
+
 }
