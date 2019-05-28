@@ -11,6 +11,8 @@ import io.dropwizard.setup.Environment;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 @JsonTypeName("rabbit")
 public class RabbitInFactory implements InFactory {

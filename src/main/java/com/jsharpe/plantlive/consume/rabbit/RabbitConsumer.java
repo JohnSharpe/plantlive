@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 public class RabbitConsumer implements Managed {
 
@@ -21,6 +23,8 @@ public class RabbitConsumer implements Managed {
     private final ConnectionFactory connectionFactory;
     private final String queue;
 
+    private Connection connection;
+
     public RabbitConsumer(
             final InService inService,
             final String host,
@@ -29,7 +33,7 @@ public class RabbitConsumer implements Managed {
             final String password,
             final String vhost,
             final String queue
-    ) {
+    ) throws KeyManagementException, NoSuchAlgorithmException {
         this.inService = inService;
 
         final ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -40,6 +44,10 @@ public class RabbitConsumer implements Managed {
         if (StringUtils.isNotBlank(vhost)) {
             connectionFactory.setVirtualHost(vhost);
         }
+
+        // This is non-negotiable
+        connectionFactory.useSslProtocol();
+
         this.connectionFactory = connectionFactory;
 
         this.queue = queue;
@@ -47,9 +55,15 @@ public class RabbitConsumer implements Managed {
 
     @Override
     public void start() throws Exception {
+
         // TODO Will this work? Might need to either set a shared executor or create one here
-        final Connection connection = this.connectionFactory.newConnection();
-        final Channel channel = connection.createChannel();
+        this.connection = this.connectionFactory.newConnection();
+
+        final Channel channel = this.connection.createChannel();
+
+        // TODO What does this do when the queue is already there?
+        channel.queueDeclare(this.queue, true, true, true, null);
+
         channel.basicConsume(
                 this.queue,
                 AUTO_ACK,
@@ -88,7 +102,7 @@ public class RabbitConsumer implements Managed {
 
     @Override
     public void stop() throws Exception {
-
+        this.connection.close();
     }
 
 }

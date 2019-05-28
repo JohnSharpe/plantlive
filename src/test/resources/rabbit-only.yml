@@ -16,6 +16,7 @@ in:
   username: plantliverabbituser
   password: plantlivenevertell
   queue: plantlivequeue
+  retentionHours: 24
 
 out:
   type: nop
