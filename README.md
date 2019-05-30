@@ -1,4 +1,4 @@
-# plantlive
+# plantlive [![Build Status](https://travis-ci.com/JohnSharpe/plantlive.svg?branch=master)](https://travis-ci.com/JohnSharpe/plantlive)
 A Dropwizard application to read sensor data from a queue, save to an SQL database and serve up a summary over HTTP.
 
 ## Build and Test
