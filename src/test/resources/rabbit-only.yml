@@ -13,9 +13,11 @@ in:
   type: rabbit
   host: 127.0.0.1
   port: 5672
-  username: plantliverabbituser
-  password: plantlivenevertell
-  queue: plantlivequeue
+  username: plantlive_rabbituser
+  password: plantlive_nevertell
+
+  queue: plantlive
+
   retentionHours: 24
 
 out:

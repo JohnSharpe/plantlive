@@ -2,6 +2,7 @@ package com.jsharpe.plantlive.consume.rabbit;
 
 import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.exceptions.ConsumeException;
+import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -24,6 +25,7 @@ public class RabbitConsumer implements Managed {
     private final String queue;
 
     private Connection connection;
+    private Channel channel;
 
     public RabbitConsumer(
             final InService inService,
@@ -56,15 +58,16 @@ public class RabbitConsumer implements Managed {
     @Override
     public void start() throws Exception {
 
-        // TODO Will this work? Might need to either set a shared executor or create one here
+        // Connections are meant to be long-lived and opening them is expensive.
         this.connection = this.connectionFactory.newConnection();
+        // Channels are also meant to be long-lived but some recoverable protocols might cause them to close.
+        this.channel = this.connection.createChannel();
 
-        final Channel channel = this.connection.createChannel();
+        // Use the default, direct exchange
+        // Note this is for exclusive use - if this application was clustered this would need to be revisited.
+        this.channel.queueDeclare(this.queue, true, true, true, null);
 
-        // TODO What does this do when the queue is already there?
-        channel.queueDeclare(this.queue, true, true, true, null);
-
-        channel.basicConsume(
+        this.channel.basicConsume(
                 this.queue,
                 AUTO_ACK,
                 ((consumerTag, delivery) -> {
@@ -102,6 +105,7 @@ public class RabbitConsumer implements Managed {
 
     @Override
     public void stop() throws Exception {
+        this.channel.close();
         this.connection.close();
     }
 
