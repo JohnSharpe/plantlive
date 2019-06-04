@@ -108,7 +108,7 @@
                         <image>
                             <name>plantlive-rabbit</name>
                             <build>
-                                <contextDir>${project.basedir}/src/non-packaged/rabbit/</contextDir>
+                                <contextDir>${project.basedir}/src/test/resources/rabbit/</contextDir>
                             </build>
                             <run>
                                 <ports>

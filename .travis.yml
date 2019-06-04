@@ -7,15 +7,10 @@ services:
 install: true
 
 before_script:
-  - sudo rabbitmq-plugins enable rabbitmq_management rabbitmq_mqtt
-
   - sudo wget http://guest:guest@localhost:15672/cli/rabbitmqadmin -O /usr/local/bin/rabbitmqadmin
   - sudo chmod +x /usr/local/bin/rabbitmqadmin
-  - sudo rabbitmqadmin declare queue name=plantlive durable=true
-
-  - sudo rabbitmqctl add_user plantlive_rabbituser plantlive_nevertell
-  - sudo rabbitmqctl set_permissions -p / plantlive_rabbituser "" "" ".*"
-  - sudo rabbitmqctl set_user_tags plantlive_rabbituser test-consumer
+  - sudo rabbitmq-plugins enable rabbitmq_mqtt
+  - sudo sh src/test/resources/rabbit/prep-rabbit.sh
 
 script:
   - mvn -Ddocker.skip verify -B
