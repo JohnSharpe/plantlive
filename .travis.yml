@@ -4,11 +4,21 @@ services:
   - rabbitmq
 #  - postgresql
 
+install: true
+
 before_script:
-  - rabbitmqctl add_user plantlive_rabbituser plantlive_nevertell
-  - rabbitmqctl set_permissions -p / plantlive_rabbituser "" "" ".*"
-  - rabbitmqctl set_user_tags plantlive_rabbituser test-consumer
-  - rabbitmqadmin declare queue name=plantlive durable=true
+  - sudo rabbitmq-plugins enable rabbitmq_management rabbitmq_mqtt
+
+  - sudo wget http://guest:guest@localhost:15672/cli/rabbitmqadmin -O /usr/local/bin/rabbitmqadmin
+  - sudo chmod +x /usr/local/bin/rabbitmqadmin
+  - sudo rabbitmqadmin declare queue name=plantlive durable=true
+
+  - sudo rabbitmqctl add_user plantlive_rabbituser plantlive_nevertell
+  - sudo rabbitmqctl set_permissions -p / plantlive_rabbituser "" "" ".*"
+  - sudo rabbitmqctl set_user_tags plantlive_rabbituser test-consumer
+
+script:
+  - mvn -Ddocker.skip verify -B
 
 #addons:
 #  postgresql: "11"
