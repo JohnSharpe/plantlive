@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import java.io.IOException;
+
 @Category(IntegrationTest.class)
 public class RabbitConsumerTest {
 
@@ -43,6 +45,60 @@ public class RabbitConsumerTest {
 
         // When
         rabbitConsumer.start();
+    }
+
+    @Test(expected = AuthenticationFailureException.class)
+    public void testIncorrectPassword() throws Exception {
+        // Given
+        final RabbitConsumer rabbitConsumer = new RabbitConsumer(
+                this.inService,
+                "127.0.0.1",
+                5672,
+                "plantlive_rabbituser",
+                "some-wrong-password",
+                null,
+                "plantlivequeue"
+        );
+
+        // When
+        rabbitConsumer.start();
+    }
+
+    @Test(expected = IOException.class)
+    public void testNoSuchQueue() throws Exception {
+        // Given
+        final RabbitConsumer rabbitConsumer = new RabbitConsumer(
+                this.inService,
+                "127.0.0.1",
+                5672,
+                "plantlive_rabbituser",
+                "plantlive_nevertell",
+                null,
+                "plantlifffe"
+        );
+
+        // When
+        rabbitConsumer.start();
+    }
+
+    // TEMP
+    @Test
+    public void testCorrectPassword() throws Exception {
+        // Given
+        final RabbitConsumer rabbitConsumer = new RabbitConsumer(
+                this.inService,
+                "127.0.0.1",
+                5672,
+                "plantlive_rabbituser",
+                "plantlive_nevertell",
+                null,
+                "plantlive"
+        );
+
+        // When
+        rabbitConsumer.start();
+
+        // TODO More happy path stuff...
     }
 
     // TODO more!

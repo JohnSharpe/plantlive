@@ -21,8 +21,9 @@
 
         <rabbitmq.image.version>3.7.15-management</rabbitmq.image.version>
 
-        <rabbitmq.port>5672</rabbitmq.port>
-        <rabbitmq.admin.port>15672</rabbitmq.admin.port>
+        <rabbitmq.mqtt.tcp.port>1883</rabbitmq.mqtt.tcp.port>
+        <rabbitmq.amqp.tcp.port>5672</rabbitmq.amqp.tcp.port>
+        <rabbitmq.admin.http.port>15672</rabbitmq.admin.http.port>
     </properties>
 
     <dependencies>
@@ -105,11 +106,15 @@
                     <images>
                         <!-- rabbit -->
                         <image>
-                            <name>rabbitmq:${rabbitmq.image.version}</name>
+                            <name>plantlive-rabbit</name>
+                            <build>
+                                <contextDir>${project.basedir}/src/non-packaged/rabbit/</contextDir>
+                            </build>
                             <run>
                                 <ports>
-                                    <port>5672:${rabbitmq.port}</port>
-                                    <port>15672:${rabbitmq.admin.port}</port>
+                                    <port>1883:${rabbitmq.mqtt.tcp.port}</port>
+                                    <port>5672:${rabbitmq.amqp.tcp.port}</port>
+                                    <port>15672:${rabbitmq.admin.http.port}</port>
                                 </ports>
                                 <wait>
                                     <http>
@@ -118,6 +123,9 @@
                                         <status>200</status>
                                     </http>
                                     <time>30000</time>
+                                    <exec>
+                                        <postStart>/root/prep-rabbit.sh</postStart>
+                                    </exec>
                                 </wait>
                             </run>
                         </image>
@@ -136,6 +144,13 @@
 
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>build</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>start</id>
                         <phase>pre-integration-test</phase>

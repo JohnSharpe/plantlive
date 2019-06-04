@@ -35,7 +35,7 @@ public class RabbitConsumer implements Managed {
             final String password,
             final String vhost,
             final String queue
-    ) throws KeyManagementException, NoSuchAlgorithmException {
+    ) {
         this.inService = inService;
 
         final ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -47,8 +47,8 @@ public class RabbitConsumer implements Managed {
             connectionFactory.setVirtualHost(vhost);
         }
 
-        // This is non-negotiable
-        connectionFactory.useSslProtocol();
+        // TODO Implement this!
+        // connectionFactory.useSslProtocol();
 
         this.connectionFactory = connectionFactory;
 
@@ -63,9 +63,9 @@ public class RabbitConsumer implements Managed {
         // Channels are also meant to be long-lived but some recoverable protocols might cause them to close.
         this.channel = this.connection.createChannel();
 
-        // Use the default, direct exchange
-        // Note this is for exclusive use - if this application was clustered this would need to be revisited.
-        this.channel.queueDeclare(this.queue, true, true, true, null);
+        // Use the default, direct exchange.
+        // Passively declare the queue - we'll sort it out externally
+        this.channel.queueDeclarePassive(this.queue);
 
         this.channel.basicConsume(
                 this.queue,
