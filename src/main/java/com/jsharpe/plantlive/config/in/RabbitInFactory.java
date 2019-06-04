@@ -5,14 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.consume.rabbit.RabbitConsumer;
+import com.jsharpe.plantlive.health.RabbitHealthCheck;
 import com.jsharpe.plantlive.repositories.RepositoryWrapper;
+import com.rabbitmq.client.ConnectionFactory;
 import io.dropwizard.setup.Environment;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 
 @JsonTypeName("rabbit")
 public class RabbitInFactory implements InFactory {
@@ -75,13 +76,21 @@ public class RabbitInFactory implements InFactory {
                 this.retentionHours
         );
 
+        final ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost(host);
+        connectionFactory.setPort(port);
+        connectionFactory.setUsername(username);
+        connectionFactory.setPassword(password);
+        if (StringUtils.isNotBlank(vhost)) {
+            connectionFactory.setVirtualHost(vhost);
+        }
+
+        final RabbitHealthCheck rabbitHealthcheck = new RabbitHealthCheck(connectionFactory, this.queue);
+        environment.healthChecks().register("rabbit", rabbitHealthcheck);
+
         final RabbitConsumer rabbitConsumer = new RabbitConsumer(
                 inService,
-                this.host,
-                this.port,
-                this.username,
-                this.password,
-                this.vhost,
+                connectionFactory,
                 this.queue
         );
 

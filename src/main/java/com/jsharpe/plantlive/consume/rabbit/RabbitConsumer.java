@@ -2,18 +2,14 @@ package com.jsharpe.plantlive.consume.rabbit;
 
 import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.exceptions.ConsumeException;
-import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import io.dropwizard.lifecycle.Managed;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 
 public class RabbitConsumer implements Managed {
 
@@ -29,29 +25,11 @@ public class RabbitConsumer implements Managed {
 
     public RabbitConsumer(
             final InService inService,
-            final String host,
-            final Integer port,
-            final String username,
-            final String password,
-            final String vhost,
+            final ConnectionFactory connectionFactory,
             final String queue
     ) {
         this.inService = inService;
-
-        final ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(host);
-        connectionFactory.setPort(port);
-        connectionFactory.setUsername(username);
-        connectionFactory.setPassword(password);
-        if (StringUtils.isNotBlank(vhost)) {
-            connectionFactory.setVirtualHost(vhost);
-        }
-
-        // TODO Implement this!
-        // connectionFactory.useSslProtocol();
-
         this.connectionFactory = connectionFactory;
-
         this.queue = queue;
     }
 

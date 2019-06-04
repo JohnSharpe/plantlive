@@ -3,18 +3,17 @@ package com.jsharpe.plantlive.consume.rabbit;
 import com.jsharpe.plantlive.IntegrationTest;
 import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.consume.PasswordHasher;
-import com.jsharpe.plantlive.consume.rabbit.RabbitConsumer;
 import com.jsharpe.plantlive.models.Detail;
 import com.jsharpe.plantlive.repositories.MockDetailRepository;
 import com.jsharpe.plantlive.repositories.MockPlantRepository;
 import com.rabbitmq.client.AuthenticationFailureException;
+import com.rabbitmq.client.ConnectionFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
@@ -51,13 +50,15 @@ public class RabbitConsumerTest {
     @Test(expected = AuthenticationFailureException.class)
     public void testNoSuchUser() throws Exception {
         // Given
+        final ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("some-nonexistent-user");
+        connectionFactory.setPassword("some-nonexistent-user's-password");
+
         final RabbitConsumer rabbitConsumer = new RabbitConsumer(
                 this.inService,
-                "127.0.0.1",
-                5672,
-                "some-nonexistent-user",
-                "some-nonexistent-user's-password",
-                null,
+                connectionFactory,
                 "plantlive"
         );
 
@@ -68,13 +69,15 @@ public class RabbitConsumerTest {
     @Test(expected = AuthenticationFailureException.class)
     public void testIncorrectPassword() throws Exception {
         // Given
+        final ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("plantlive_rabbituser");
+        connectionFactory.setPassword("some-wrong-password");
+
         final RabbitConsumer rabbitConsumer = new RabbitConsumer(
                 this.inService,
-                "127.0.0.1",
-                5672,
-                "plantlive_rabbituser",
-                "some-wrong-password",
-                null,
+                connectionFactory,
                 "plantlive"
         );
 
@@ -85,13 +88,15 @@ public class RabbitConsumerTest {
     @Test(expected = IOException.class)
     public void testNoSuchQueue() throws Exception {
         // Given
+        final ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("plantlive_rabbituser");
+        connectionFactory.setPassword("plantlive_nevertell");
+
         final RabbitConsumer rabbitConsumer = new RabbitConsumer(
                 this.inService,
-                "127.0.0.1",
-                5672,
-                "plantlive_rabbituser",
-                "plantlive_nevertell",
-                null,
+                connectionFactory,
                 "plantlifffe"
         );
 
@@ -102,13 +107,15 @@ public class RabbitConsumerTest {
     @Test
     public void testOnePublish() throws Exception {
         // Given
+        final ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("plantlive_rabbituser");
+        connectionFactory.setPassword("plantlive_nevertell");
+
         final RabbitConsumer rabbitConsumer = new RabbitConsumer(
                 this.inService,
-                "127.0.0.1",
-                5672,
-                "plantlive_rabbituser",
-                "plantlive_nevertell",
-                null,
+                connectionFactory,
                 "plantlive"
         );
         rabbitConsumer.start();
@@ -133,13 +140,15 @@ public class RabbitConsumerTest {
     @Test
     public void testRecoverFromPublish() throws Exception {
         // Given
+        final ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("plantlive_rabbituser");
+        connectionFactory.setPassword("plantlive_nevertell");
+
         final RabbitConsumer rabbitConsumer = new RabbitConsumer(
                 this.inService,
-                "127.0.0.1",
-                5672,
-                "plantlive_rabbituser",
-                "plantlive_nevertell",
-                null,
+                connectionFactory,
                 "plantlive"
         );
         rabbitConsumer.start();

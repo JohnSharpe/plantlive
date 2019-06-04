@@ -16,6 +16,8 @@
         <commons-codec.version>1.12</commons-codec.version>
         <rabbitmq.version>5.7.0</rabbitmq.version>
 
+        <mockito.version>1.10.19</mockito.version>
+
         <surefire.version>3.0.0-M3</surefire.version>
         <docker-maven-plugin.version>0.30.0</docker-maven-plugin.version>
 
@@ -57,6 +59,13 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-client</artifactId>
             <version>${dropwizard.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
 
