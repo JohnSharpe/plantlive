@@ -117,7 +117,41 @@ public class RabbitConsumerTest {
 
         // When
         this.localRabbitPublisher.publish("1;1234;2;3;4;5");
-        Thread.sleep(1000);
+        Thread.sleep(500);
+
+        // Then
+        final Set<Detail> details = this.detailRepository.get();
+        Assert.assertEquals(1, details.size());
+
+        final Detail detail = details.iterator().next();
+        Assert.assertEquals(2, detail.getTemperature());
+        Assert.assertEquals(3, detail.getHumidity());
+        Assert.assertEquals(4, detail.getLight());
+        Assert.assertEquals(5, detail.getConductivity());
+    }
+
+    @Test
+    public void testRecoverFromPublish() throws Exception {
+        // Given
+        final RabbitConsumer rabbitConsumer = new RabbitConsumer(
+                this.inService,
+                "127.0.0.1",
+                5672,
+                "plantlive_rabbituser",
+                "plantlive_nevertell",
+                null,
+                "plantlive"
+        );
+        rabbitConsumer.start();
+
+        this.plantRepository.save(PasswordHasher.hash("1234"), "cactus", "test");
+
+        // When
+        // No such plant!
+        this.localRabbitPublisher.publish("2;1234;2;3;4;5");
+        Thread.sleep(500);
+        this.localRabbitPublisher.publish("1;1234;2;3;4;5");
+        Thread.sleep(500);
 
         // Then
         final Set<Detail> details = this.detailRepository.get();
