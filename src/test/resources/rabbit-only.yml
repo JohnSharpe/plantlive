@@ -1,0 +1,24 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 3000
+  adminConnectors:
+    - type: http
+      port: 4000
+
+persistence:
+  type: nop
+
+in:
+  type: rabbit
+  host: 127.0.0.1
+  port: 5672
+  username: plantlive_rabbituser
+  password: plantlive_nevertell
+
+  queue: plantlive
+
+  retentionHours: 24
+
+out:
+  type: nop

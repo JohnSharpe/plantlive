@@ -1,1 +1,19 @@
 language: java
+
+services:
+  - rabbitmq
+#  - postgresql
+
+install: true
+
+before_script:
+  - sudo wget http://guest:guest@localhost:15672/cli/rabbitmqadmin -O /usr/local/bin/rabbitmqadmin
+  - sudo chmod +x /usr/local/bin/rabbitmqadmin
+  - sudo rabbitmq-plugins enable rabbitmq_mqtt
+  - sudo sh src/test/resources/rabbit/prep-rabbit.sh
+
+script:
+  - mvn -Ddocker.skip verify -B
+
+#addons:
+#  postgresql: "11"
