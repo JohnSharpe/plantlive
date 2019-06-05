@@ -38,12 +38,15 @@ public class RabbitConsumer implements Managed {
 
         // Connections are meant to be long-lived and opening them is expensive.
         this.connection = this.connectionFactory.newConnection();
+        LOGGER.debug("Opened a Rabbit connection.");
         // Channels are also meant to be long-lived but some recoverable protocols might cause them to close.
         this.channel = this.connection.createChannel();
+        LOGGER.debug("Opened a Rabbit channel.");
 
         // Use the default, direct exchange.
         // Passively declare the queue - we'll sort it out externally
         this.channel.queueDeclarePassive(this.queue);
+        LOGGER.info("Queue [{}] exists, starting consumer...", this.queue);
 
         this.channel.basicConsume(
                 this.queue,
@@ -64,6 +67,7 @@ public class RabbitConsumer implements Managed {
 
                     try {
                         // TODO Lots of assumptions here, can we not get Rabbit to take care of this?
+                        // TODO Handle NumberFormatException more elegantly
                         this.inService.write(
                                 Long.valueOf(messageParts[0]),
                                 messageParts[1],
@@ -83,6 +87,7 @@ public class RabbitConsumer implements Managed {
 
     @Override
     public void stop() throws Exception {
+        LOGGER.info("Closing Rabbit channel and connection.");
         this.channel.close();
         this.connection.close();
     }

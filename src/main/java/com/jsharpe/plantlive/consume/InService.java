@@ -47,19 +47,22 @@ public class InService {
         final Optional<Plant> optionalPlant = this.plantRepository.get(plantId);
 
         if (!optionalPlant.isPresent()) {
-            LOGGER.warn("No plant with id {}", plantId);
-            throw new ConsumeException();
+            final String problem = String.format("No plant with id [%d]", plantId);
+            LOGGER.warn(problem);
+            throw new ConsumeException(problem);
         }
 
         final Plant plant = optionalPlant.get();
 
         if (!PasswordHasher.verify(plant.getPassword(), password)) {
-            LOGGER.warn("Password {} is incorrect for plant with id {}", password, plantId);
-            throw new ConsumeException();
+            final String problem = String.format("Password [%s] is incorrect for plant with id [%d]", password, plantId);
+            LOGGER.warn(problem);
+            throw new ConsumeException(problem);
         }
 
         // We're going to trust the date
 
+        // TODO Ugh.
         final boolean temperatureValid = verify(temperature);
         final boolean humidityValid = verify(humidity);
         final boolean lightValid = verify(light);
@@ -68,16 +71,12 @@ public class InService {
         if (temperatureValid && humidityValid && lightValid && conductivityValid) {
             this.detailRepository.save(plantId, timestamp, temperature, humidity, light, conductivity);
         } else {
-            LOGGER.warn(
-                    "Data invalid for detail - plantId: {}, timestamp: {}, temp: {}, hum: {}, light: {}, cond: {}",
-                    plantId,
-                    timestamp,
-                    temperature,
-                    humidity,
-                    light,
-                    conductivity
+            final String problem = String.format(
+                    "Data invalid for detail - plantId: [%d], timestamp: [%s], temp: [%d], hum: [%d], light: [%d], cond: [%d]",
+                    plantId, timestamp, temperature, humidity, light, conductivity
             );
-            throw new ConsumeException();
+            LOGGER.warn(problem);
+            throw new ConsumeException(problem);
         }
 
     }
