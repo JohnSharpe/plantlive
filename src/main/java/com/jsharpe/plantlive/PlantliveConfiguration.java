@@ -7,6 +7,7 @@ import com.jsharpe.plantlive.config.out.OutFactory;
 import com.jsharpe.plantlive.config.persistence.PersistenceFactory;
 import com.jsharpe.plantlive.repositories.RepositoryWrapper;
 import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.setup.Environment;
 
 import javax.validation.Valid;
@@ -39,7 +40,7 @@ public class PlantliveConfiguration extends Configuration {
 
     public void initialise(final Environment environment) throws Exception {
 
-        final RepositoryWrapper repositories = this.persistenceFactory.get(environment);
+        final RepositoryWrapper repositories = this.persistenceFactory.getRepositories(environment);
 
         // TODO Consider passing the necessary repositories explicitly
         // TODO Also consider a ReadRepository and a WriteRepository for both entity types
@@ -47,6 +48,10 @@ public class PlantliveConfiguration extends Configuration {
         this.inFactory.initialise(environment, repositories);
         this.outFactory.initialise(environment, repositories);
 
+    }
+
+    public DataSourceFactory getDatabase() {
+        return this.persistenceFactory.getDatabase();
     }
 
 }
