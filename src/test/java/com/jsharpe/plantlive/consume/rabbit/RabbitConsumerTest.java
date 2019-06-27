@@ -4,8 +4,8 @@ import com.jsharpe.plantlive.IntegrationTest;
 import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.consume.PasswordHasher;
 import com.jsharpe.plantlive.models.Detail;
-import com.jsharpe.plantlive.repositories.MockDetailRepository;
-import com.jsharpe.plantlive.repositories.MockPlantRepository;
+import com.jsharpe.plantlive.models.Plant;
+import com.jsharpe.plantlive.repositories.MockInRepository;
 import com.rabbitmq.client.AuthenticationFailureException;
 import com.rabbitmq.client.ConnectionFactory;
 import org.junit.Assert;
@@ -14,20 +14,19 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 @Category(IntegrationTest.class)
 public class RabbitConsumerTest {
 
-    private final MockPlantRepository plantRepository;
-    private final MockDetailRepository detailRepository;
+    private final MockInRepository inRepository;
     private final LocalRabbitPublisher localRabbitPublisher;
     private final InService inService;
 
     public RabbitConsumerTest() throws IOException, TimeoutException {
-        this.plantRepository = new MockPlantRepository();
-        this.detailRepository = new MockDetailRepository();
+        this.inRepository = new MockInRepository();
 
         this.localRabbitPublisher = new LocalRabbitPublisher(
                 "127.0.0.1",
@@ -38,13 +37,12 @@ public class RabbitConsumerTest {
                 "plantlive"
         );
 
-        this.inService = new InService(this.plantRepository, this.detailRepository, 24);
+        this.inService = new InService(this.inRepository, 24);
     }
 
     @Before
     public void before() {
-        this.plantRepository.clear();
-        this.detailRepository.clear();
+        this.inRepository.clear();
     }
 
     @Test(expected = AuthenticationFailureException.class)
@@ -120,14 +118,16 @@ public class RabbitConsumerTest {
         );
         rabbitConsumer.start();
 
-        this.plantRepository.save(PasswordHasher.hash("1234"), "cactus", "test");
+        final Set<Plant> givenPlants = new HashSet<>();
+        givenPlants.add(new Plant(-1, PasswordHasher.hash("1234"), "cactus"));
+        this.inRepository.populate(givenPlants, null);
 
         // When
         this.localRabbitPublisher.publish("1;1234;2;3;4;5");
         Thread.sleep(500);
 
         // Then
-        final Set<Detail> details = this.detailRepository.get();
+        final Set<Detail> details = this.inRepository.getDetails();
         Assert.assertEquals(1, details.size());
 
         final Detail detail = details.iterator().next();
@@ -153,7 +153,9 @@ public class RabbitConsumerTest {
         );
         rabbitConsumer.start();
 
-        this.plantRepository.save(PasswordHasher.hash("1234"), "cactus", "test");
+        final Set<Plant> givenPlants = new HashSet<>();
+        givenPlants.add(new Plant(-1, PasswordHasher.hash("1234"), "cactus"));
+        this.inRepository.populate(givenPlants, null);
 
         // When
         // No such plant!
@@ -163,7 +165,7 @@ public class RabbitConsumerTest {
         Thread.sleep(500);
 
         // Then
-        final Set<Detail> details = this.detailRepository.get();
+        final Set<Detail> details = this.inRepository.getDetails();
         Assert.assertEquals(1, details.size());
 
         final Detail detail = details.iterator().next();

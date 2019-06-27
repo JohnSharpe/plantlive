@@ -6,8 +6,8 @@ public class Detail {
 
     private final long id;
     private final long plantId;
-    private final Date timestamp;
 
+    private final Date timestamp;
     private final int temperature;
     private final int humidity;
     private final int light;

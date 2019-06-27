@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.jsharpe.plantlive.repositories.RepositoryWrapper;
-import com.jsharpe.plantlive.repositories.detail.DetailRepository;
-import com.jsharpe.plantlive.repositories.detail.NopDetailRepository;
-import com.jsharpe.plantlive.repositories.plant.NopPlantRepository;
-import com.jsharpe.plantlive.repositories.plant.PlantRepository;
+import com.jsharpe.plantlive.repositories.in.InRepository;
+import com.jsharpe.plantlive.repositories.in.NopInRepository;
+import com.jsharpe.plantlive.repositories.out.NopOutRepository;
+import com.jsharpe.plantlive.repositories.out.OutRepository;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Environment;
@@ -39,13 +39,13 @@ public class SqlPersistenceFactory implements PersistenceFactory {
         final Jdbi jdbi = new JdbiFactory().build(environment, this.database, "sql");
 
         // Create TODO
-        final PlantRepository plantRepository = new NopPlantRepository(); // jdbi.onDemand(PlantRepository.class)
-        final DetailRepository detailRepository = new NopDetailRepository(); // jdbi.onDemand(DetailRepository.class)
+        final InRepository inRepository = new NopInRepository(); // jdbi.onDemand(InRepository.class);
+        final OutRepository outRepository = new NopOutRepository(); // jdbi.onDemand(OutRepository.class);
 
         // Register
-        environment.jersey().register(plantRepository);
-        environment.jersey().register(detailRepository);
+        environment.jersey().register(inRepository);
+        environment.jersey().register(outRepository);
 
-        return new RepositoryWrapper(plantRepository, detailRepository);
+        return new RepositoryWrapper(inRepository, outRepository);
     }
 }

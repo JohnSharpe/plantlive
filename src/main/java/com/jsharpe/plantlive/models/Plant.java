@@ -1,17 +1,18 @@
 package com.jsharpe.plantlive.models;
 
+import java.beans.ConstructorProperties;
+
 public class Plant {
 
     private final long id;
     private final String password;
     private final String type;
-    private final String label;
 
-    public Plant(long id, String password, String type, String label) {
+    @ConstructorProperties({"id", "password", "type"})
+    public Plant(long id, String password, String type) {
         this.id = id;
         this.password = password;
         this.type = type;
-        this.label = label;
     }
 
     public long getId() {
@@ -24,10 +25,6 @@ public class Plant {
 
     public String getType() {
         return type;
-    }
-
-    public String getLabel() {
-        return label;
     }
 
 }

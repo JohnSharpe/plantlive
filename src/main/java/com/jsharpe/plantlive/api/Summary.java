@@ -16,10 +16,10 @@ public class Summary {
     // TODO this might eventually be an enum
     private final String type;
 
-    private final int temperature;
-    private final int humidity;
-    private final int light;
-    private final int conductivity;
+    private final double temperature;
+    private final double humidity;
+    private final double light;
+    private final double conductivity;
 
     // TODO include ranges/parameters for bad, medium, good, perfect etc.
 
@@ -38,10 +38,10 @@ public class Summary {
     public Summary(
             @JsonProperty("id") long id,
             @JsonProperty("type") String type,
-            @JsonProperty("temperature") int temperature,
-            @JsonProperty("humidity") int humidity,
-            @JsonProperty("light") int light,
-            @JsonProperty("conductivity") int conductivity
+            @JsonProperty("temperature") double temperature,
+            @JsonProperty("humidity") double humidity,
+            @JsonProperty("light") double light,
+            @JsonProperty("conductivity") double conductivity
     ) {
         this.id = id;
         this.type = type;
@@ -62,22 +62,22 @@ public class Summary {
     }
 
     @JsonProperty("temperature")
-    public int getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
 
     @JsonProperty("humidity")
-    public int getHumidity() {
+    public double getHumidity() {
         return humidity;
     }
 
     @JsonProperty("light")
-    public int getLight() {
+    public double getLight() {
         return light;
     }
 
     @JsonProperty("conductivity")
-    public int getConductivity() {
+    public double getConductivity() {
         return conductivity;
     }
 

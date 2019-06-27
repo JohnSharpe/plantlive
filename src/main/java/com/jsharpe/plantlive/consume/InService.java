@@ -2,11 +2,11 @@ package com.jsharpe.plantlive.consume;
 
 import com.jsharpe.plantlive.exceptions.ConsumeException;
 import com.jsharpe.plantlive.models.Plant;
-import com.jsharpe.plantlive.repositories.detail.DetailRepository;
-import com.jsharpe.plantlive.repositories.plant.PlantRepository;
+import com.jsharpe.plantlive.repositories.in.InRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -18,19 +18,16 @@ public class InService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InService.class);
 
-    private final PlantRepository plantRepository;
-    private final DetailRepository detailRepository;
+    private final InRepository inRepository;
 
+    // TODO Could remove detail entries older than retentionHours
     private final int retentionHours;
 
     public InService(
-            final PlantRepository plantRepository,
-            final DetailRepository detailRepository,
+            final InRepository inRepository,
             final int retentionHours
     ) {
-        this.plantRepository = plantRepository;
-        this.detailRepository = detailRepository;
-
+        this.inRepository = inRepository;
         this.retentionHours = retentionHours;
     }
 
@@ -44,7 +41,7 @@ public class InService {
             final int conductivity
     ) throws ConsumeException {
 
-        final Optional<Plant> optionalPlant = this.plantRepository.get(plantId);
+        final Optional<Plant> optionalPlant = this.inRepository.getPlant(plantId);
 
         if (!optionalPlant.isPresent()) {
             final String problem = String.format("No plant with id [%d]", plantId);
@@ -69,7 +66,11 @@ public class InService {
         final boolean conductivityValid = verify(conductivity);
 
         if (temperatureValid && humidityValid && lightValid && conductivityValid) {
-            this.detailRepository.save(plantId, timestamp, temperature, humidity, light, conductivity);
+            try {
+                this.inRepository.saveDetail(plantId, timestamp, temperature, humidity, light, conductivity);
+            } catch (SQLException e) {
+                LOGGER.warn("SQL problem saving detail", e);
+            }
         } else {
             final String problem = String.format(
                     "Data invalid for detail - plantId: [%d], timestamp: [%s], temp: [%d], hum: [%d], light: [%d], cond: [%d]",
