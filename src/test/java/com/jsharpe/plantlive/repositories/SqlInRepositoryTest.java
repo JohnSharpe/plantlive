@@ -31,7 +31,7 @@ public class SqlInRepositoryTest {
     public static final DropwizardAppRule<PlantliveConfiguration> RULE =
             new DropwizardAppRule<>(PlantliveApplication.class, ResourceHelpers.resourceFilePath("postgres-only.yml"));
 
-    public static InRepository IN_REPOSITORY;
+    private static InRepository IN_REPOSITORY;
 
     @BeforeClass
     public static void setupClass() throws LiquibaseException, SQLException {
