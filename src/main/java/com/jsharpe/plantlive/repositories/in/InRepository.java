@@ -15,7 +15,7 @@ public interface InRepository {
     @RegisterConstructorMapper(Plant.class)
     Optional<Plant> getPlant(long id);
 
-    @SqlUpdate("INSERT INTO details (plant_id, timestamp, temperature, humidity, light, conductivity) VALUES (?, ?, ?, ?, ?, ?)")
-    int saveDetail(long plantId, Date timestamp, int temperature, int humidity, int light, int conductivity) throws SQLException;
+    @SqlUpdate("INSERT INTO details (plant_id, in_timestamp, temperature, humidity, light, conductivity) VALUES (?, ?, ?, ?, ?, ?)")
+    int saveDetail(long plantId, Date inTimestamp, int temperature, int humidity, int light, int conductivity) throws SQLException;
 
 }

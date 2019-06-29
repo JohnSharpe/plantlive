@@ -26,7 +26,7 @@
                 <constraints nullable="false" foreignKeyName="fk_detail_plant" references="plants(id)"/>
             </column>
 
-            <column name="timestamp" type="datetime">
+            <column name="in_timestamp" type="datetime">
                 <constraints nullable="false"/>
             </column>
 

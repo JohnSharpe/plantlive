@@ -30,13 +30,13 @@ public class MockInRepository extends MockRepository implements InRepository {
     }
 
     @Override
-    public int saveDetail(long plantId, Date timestamp, int temperature, int humidity, int light, int conductivity) throws SQLException {
+    public int saveDetail(long plantId, Date inTimestamp, int temperature, int humidity, int light, int conductivity) throws SQLException {
 
         if (!this.getPlant(plantId).isPresent()) {
             throw new SQLException();
         }
 
-        final Detail detail = new Detail(this.lastDetailId.incrementAndGet(), plantId, timestamp, temperature, humidity, light, conductivity);
+        final Detail detail = new Detail(this.lastDetailId.incrementAndGet(), plantId, inTimestamp, temperature, humidity, light, conductivity);
         this.details.add(detail);
         return 1;
     }

@@ -38,7 +38,7 @@ public class MockOutRepository extends MockRepository implements OutRepository {
         }
 
         for (Detail detail : this.details) {
-            if (detail.getPlantId() == id && detail.getTimestamp().after(since)) {
+            if (detail.getPlantId() == id && detail.getInTimestamp().after(since)) {
                 tempTotal += detail.getTemperature();
                 tempCount++;
 

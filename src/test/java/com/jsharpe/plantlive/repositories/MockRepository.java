@@ -43,7 +43,7 @@ public class MockRepository {
             details.forEach(detail -> this.details.add(new Detail(
                     this.lastDetailId.incrementAndGet(),
                     detail.getPlantId(),
-                    detail.getTimestamp(),
+                    detail.getInTimestamp(),
                     detail.getTemperature(),
                     detail.getHumidity(),
                     detail.getLight(),

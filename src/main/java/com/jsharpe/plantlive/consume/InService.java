@@ -34,7 +34,7 @@ public class InService {
     public void write(
             final long plantId,
             final String password,
-            final Date timestamp,
+            final Date inTimestamp,
             final int temperature,
             final int humidity,
             final int light,
@@ -67,14 +67,14 @@ public class InService {
 
         if (temperatureValid && humidityValid && lightValid && conductivityValid) {
             try {
-                this.inRepository.saveDetail(plantId, timestamp, temperature, humidity, light, conductivity);
+                this.inRepository.saveDetail(plantId, inTimestamp, temperature, humidity, light, conductivity);
             } catch (SQLException e) {
                 LOGGER.warn("SQL problem saving detail", e);
             }
         } else {
             final String problem = String.format(
-                    "Data invalid for detail - plantId: [%d], timestamp: [%s], temp: [%d], hum: [%d], light: [%d], cond: [%d]",
-                    plantId, timestamp, temperature, humidity, light, conductivity
+                    "Data invalid for detail - plantId: [%d], inTimestamp: [%s], temp: [%d], hum: [%d], light: [%d], cond: [%d]",
+                    plantId, inTimestamp, temperature, humidity, light, conductivity
             );
             LOGGER.warn(problem);
             throw new ConsumeException(problem);

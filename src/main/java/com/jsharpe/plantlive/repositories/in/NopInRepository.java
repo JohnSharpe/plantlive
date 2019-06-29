@@ -13,7 +13,7 @@ public class NopInRepository implements InRepository {
     }
 
     @Override
-    public int saveDetail(long plantId, Date timestamp, int temperature, int humidity, int light, int conductivity) {
+    public int saveDetail(long plantId, Date inTimestamp, int temperature, int humidity, int light, int conductivity) {
         return 0;
     }
 

@@ -117,7 +117,7 @@ public class InServiceTest {
 
         final Detail detail = savedDetails.stream().findFirst().orElseThrow(RuntimeException::new);
         Assert.assertEquals(1, detail.getPlantId());
-        Assert.assertEquals(timestamp, detail.getTimestamp());
+        Assert.assertEquals(timestamp, detail.getInTimestamp());
         Assert.assertEquals(23, detail.getTemperature());
         Assert.assertEquals(97, detail.getHumidity());
         Assert.assertEquals(44, detail.getLight());
