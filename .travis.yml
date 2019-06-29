@@ -15,3 +15,6 @@ before_script:
 
 script:
   - mvn -Ddocker.skip verify -B
+
+addons:
+  postgresql: '9.6'
