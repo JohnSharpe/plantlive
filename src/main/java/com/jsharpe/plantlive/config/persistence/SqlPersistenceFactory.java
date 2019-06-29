@@ -38,9 +38,9 @@ public class SqlPersistenceFactory implements PersistenceFactory {
         // Also registers a healthcheck!
         final Jdbi jdbi = new JdbiFactory().build(environment, this.database, "sql");
 
-        // Create TODO
-        final InRepository inRepository = new NopInRepository(); // jdbi.onDemand(InRepository.class);
-        final OutRepository outRepository = new NopOutRepository(); // jdbi.onDemand(OutRepository.class);
+        // Create
+        final InRepository inRepository = jdbi.onDemand(InRepository.class);
+        final OutRepository outRepository = jdbi.onDemand(OutRepository.class);
 
         // Register
         environment.jersey().register(inRepository);
