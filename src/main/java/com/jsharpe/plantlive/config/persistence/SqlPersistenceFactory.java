@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.jsharpe.plantlive.repositories.RepositoryWrapper;
 import com.jsharpe.plantlive.repositories.in.InRepository;
-import com.jsharpe.plantlive.repositories.in.NopInRepository;
-import com.jsharpe.plantlive.repositories.out.NopOutRepository;
 import com.jsharpe.plantlive.repositories.out.OutRepository;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi3.JdbiFactory;

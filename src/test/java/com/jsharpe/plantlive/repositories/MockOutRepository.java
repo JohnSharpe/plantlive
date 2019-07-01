@@ -55,8 +55,6 @@ public class MockOutRepository extends MockRepository implements OutRepository {
 
         return Optional.of(
                 new Summary(
-                        plant.getId(),
-                        plant.getType(),
                         tempTotal / tempCount,
                         humiTotal / humiCount,
                         lightTotal / lightCount,

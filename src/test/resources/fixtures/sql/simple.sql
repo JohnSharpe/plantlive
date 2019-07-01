@@ -2,6 +2,8 @@ INSERT INTO plants (id, password, type) VALUES (1, 'a', 'cactus');
 INSERT INTO plants (id, password, type) VALUES (2, 'b', 'rose');
 INSERT INTO plants (id, password, type) VALUES (3, 'c', 'dandelion');
 
+ALTER SEQUENCE plants_id_seq RESTART WITH 4;
+
 -- Reports once a day
 INSERT INTO details (id, plant_id, in_timestamp, temperature, humidity, light, conductivity)
     VALUES (1, 1, '2018-10-01 12:00:00', 21, 88, 44, 23);
@@ -45,3 +47,5 @@ INSERT INTO details (id, plant_id, in_timestamp, temperature, humidity, light, c
     VALUES (19, 2, '2018-11-21 17:00:00', 20, 77, 42, 15);
 INSERT INTO details (id, plant_id, in_timestamp, temperature, humidity, light, conductivity)
     VALUES (20, 2, '2018-11-21 18:00:00', 21, 83, 48, 26);
+
+ALTER SEQUENCE details_id_seq RESTART WITH 21;

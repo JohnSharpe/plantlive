@@ -49,7 +49,7 @@ public class LocalRabbitPublisher {
                 false,
                 null,
                 message.getBytes(StandardCharsets.UTF_8)
-           );
+        );
     }
 
 }

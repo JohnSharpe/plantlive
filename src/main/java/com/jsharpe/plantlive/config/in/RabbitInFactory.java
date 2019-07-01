@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.consume.rabbit.RabbitConsumer;
 import com.jsharpe.plantlive.health.RabbitHealthCheck;
-import com.jsharpe.plantlive.repositories.RepositoryWrapper;
 import com.jsharpe.plantlive.repositories.in.InRepository;
 import com.rabbitmq.client.ConnectionFactory;
 import io.dropwizard.setup.Environment;
