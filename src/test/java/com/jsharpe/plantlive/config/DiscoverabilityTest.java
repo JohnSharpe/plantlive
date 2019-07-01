@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.jsharpe.plantlive.UnitTest;
 import com.jsharpe.plantlive.config.in.NopInFactory;
 import com.jsharpe.plantlive.config.in.RabbitInFactory;
+import com.jsharpe.plantlive.config.out.HttpOutFactory;
 import com.jsharpe.plantlive.config.out.NopOutFactory;
 import com.jsharpe.plantlive.config.persistence.NopPersistenceFactory;
 import com.jsharpe.plantlive.config.persistence.SqlPersistenceFactory;
@@ -30,7 +31,7 @@ public class DiscoverabilityTest {
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(RabbitInFactory.class));
 
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(NopOutFactory.class));
-        // TODO MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(HttpOutFactory.class));
+        MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(HttpOutFactory.class));
     }
 
 }
