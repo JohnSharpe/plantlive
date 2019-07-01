@@ -18,7 +18,7 @@ public class SummarySerializationTest {
     @Test
     public void testMinimal() throws IOException {
         // Given
-        final Summary minimal = new Summary(1, "", 0, 0, 0, 0);
+        final Summary minimal = new Summary(0, 0, 0, 0);
         final String expected = MAPPER.writeValueAsString(minimal);
 
         // When
@@ -33,7 +33,7 @@ public class SummarySerializationTest {
     @Test
     public void testNormal() throws IOException {
         // Given
-        final Summary normal = new Summary(24, "cactus", 24, 73, 60, 4);
+        final Summary normal = new Summary(24, 73, 60, 4);
         final String expected = MAPPER.writeValueAsString(normal);
 
         // When

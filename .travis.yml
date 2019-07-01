@@ -2,7 +2,7 @@ language: java
 
 services:
   - rabbitmq
-#  - postgresql
+  - postgresql
 
 install: true
 
@@ -11,9 +11,10 @@ before_script:
   - sudo chmod +x /usr/local/bin/rabbitmqadmin
   - sudo rabbitmq-plugins enable rabbitmq_mqtt
   - sudo sh src/test/resources/rabbit/prep-rabbit.sh
+  - sudo psql -f src/test/resources/postgres/prep-postgres.sql -U postgres
 
 script:
   - mvn -Ddocker.skip verify -B
 
-#addons:
-#  postgresql: "11"
+addons:
+  postgresql: '9.6'

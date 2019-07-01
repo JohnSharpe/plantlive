@@ -6,17 +6,17 @@ public class Detail {
 
     private final long id;
     private final long plantId;
-    private final Date timestamp;
 
+    private final Date inTimestamp;
     private final int temperature;
     private final int humidity;
     private final int light;
     private final int conductivity;
 
-    public Detail(long id, long plantId, Date timestamp, int temperature, int humidity, int light, int conductivity) {
+    public Detail(long id, long plantId, Date inTimestamp, int temperature, int humidity, int light, int conductivity) {
         this.id = id;
         this.plantId = plantId;
-        this.timestamp = timestamp;
+        this.inTimestamp = inTimestamp;
         this.temperature = temperature;
         this.humidity = humidity;
         this.light = light;
@@ -31,8 +31,8 @@ public class Detail {
         return plantId;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getInTimestamp() {
+        return inTimestamp;
     }
 
     public int getTemperature() {

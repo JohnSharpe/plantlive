@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.consume.rabbit.RabbitConsumer;
 import com.jsharpe.plantlive.health.RabbitHealthCheck;
-import com.jsharpe.plantlive.repositories.RepositoryWrapper;
+import com.jsharpe.plantlive.repositories.in.InRepository;
 import com.rabbitmq.client.ConnectionFactory;
 import io.dropwizard.setup.Environment;
 import org.apache.commons.lang3.StringUtils;
@@ -68,11 +68,10 @@ public class RabbitInFactory implements InFactory {
     }
 
     @Override
-    public void initialise(Environment environment, RepositoryWrapper repositoryWrapper) throws Exception {
+    public void initialise(final Environment environment, final InRepository inRepository) {
 
         final InService inService = new InService(
-                repositoryWrapper.getPlantRepository(),
-                repositoryWrapper.getDetailRepository(),
+                inRepository,
                 this.retentionHours
         );
 

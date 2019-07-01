@@ -28,29 +28,30 @@ public class RabbitHealthCheck extends HealthCheck {
     protected Result check() throws Exception {
 
         // TODO Holding open a connection is ok, right?
-        final Connection connection = this.connectionFactory.newConnection();
 
-        if (connection == null || !connection.isOpen()) {
-            return Result.unhealthy("No Rabbit connection available");
-        }
-
-        final Channel channel = connection.createChannel();
-
-        if (channel == null || !channel.isOpen()) {
-            return Result.unhealthy("Rabbit channel is not open");
-        }
-
-        try {
-            final AMQP.Queue.DeclareOk declareOk = channel.queueDeclarePassive(this.queue);
-
-            if (declareOk.getConsumerCount() > 0) {
-                return Result.healthy();
-            } else {
-                return Result.unhealthy("No consumers attached to " + this.queue);
+        try (final Connection connection = this.connectionFactory.newConnection()) {
+            if (connection == null || !connection.isOpen()) {
+                return Result.unhealthy("No Rabbit connection available");
             }
 
-        } catch (IOException e) {
-            return Result.unhealthy(e);
+            final Channel channel = connection.createChannel();
+
+            if (channel == null || !channel.isOpen()) {
+                return Result.unhealthy("Rabbit channel is not open");
+            }
+
+            try {
+                final AMQP.Queue.DeclareOk declareOk = channel.queueDeclarePassive(this.queue);
+
+                if (declareOk.getConsumerCount() > 0) {
+                    return Result.healthy();
+                } else {
+                    return Result.unhealthy("No consumers attached to " + this.queue);
+                }
+
+            } catch (IOException e) {
+                return Result.unhealthy(e);
+            }
         }
 
     }

@@ -1,24 +1,24 @@
 package com.jsharpe.plantlive.repositories;
 
-import com.jsharpe.plantlive.repositories.detail.DetailRepository;
-import com.jsharpe.plantlive.repositories.plant.PlantRepository;
+import com.jsharpe.plantlive.repositories.in.InRepository;
+import com.jsharpe.plantlive.repositories.out.OutRepository;
 
 public class RepositoryWrapper {
 
-    private final PlantRepository plantRepository;
-    private final DetailRepository detailRepository;
+    private final InRepository inRepository;
+    private final OutRepository outRepository;
 
-    public RepositoryWrapper(PlantRepository plantRepository, DetailRepository detailRepository) {
-        this.plantRepository = plantRepository;
-        this.detailRepository = detailRepository;
+    public RepositoryWrapper(InRepository inRepository, OutRepository outRepository) {
+        this.inRepository = inRepository;
+        this.outRepository = outRepository;
     }
 
-    public PlantRepository getPlantRepository() {
-        return plantRepository;
+    public InRepository getInRepository() {
+        return inRepository;
     }
 
-    public DetailRepository getDetailRepository() {
-        return detailRepository;
+    public OutRepository getOutRepository() {
+        return outRepository;
     }
 
 }

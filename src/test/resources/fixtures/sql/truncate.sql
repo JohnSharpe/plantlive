@@ -1,0 +1,4 @@
+DELETE FROM details;
+ALTER SEQUENCE plants_id_seq RESTART WITH 1;
+DELETE FROM plants;
+ALTER SEQUENCE details_id_seq RESTART WITH 1;
