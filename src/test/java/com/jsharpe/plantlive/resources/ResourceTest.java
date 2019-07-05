@@ -42,7 +42,7 @@ public class ResourceTest {
         // Given
 
         // When
-        final Summary summary = outResource.getSummaryJson(1);
+        final Summary summary = outResource.getSummaryJson(1L);
 
         // Then
         Assert.assertEquals(0, summary.getTemperature(), 0.00000001);
@@ -62,7 +62,7 @@ public class ResourceTest {
         this.mockRepository.populate(plants, details);
 
         // When
-        final Summary summary = outResource.getSummaryJson(1);
+        final Summary summary = outResource.getSummaryJson(1L);
 
         // Then
         Assert.assertEquals(15, summary.getTemperature(), 0.00000001);
