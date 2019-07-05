@@ -40,6 +40,7 @@ public class SqlPersistenceFactory implements PersistenceFactory {
         final Jdbi jdbi = new JdbiFactory().build(environment, this.database, "sql");
 
         // Create
+        // TODO We don't require PlantIn behaviour yet
         final PlantInRepository plantInRepository = new NopPlantInRepository();
         // final PlantInRepository plantInRepository = jdbi.onDemand(PlantInRepository.class);
         final PlantOutRepository plantOutRepository = jdbi.onDemand(PlantOutRepository.class);
