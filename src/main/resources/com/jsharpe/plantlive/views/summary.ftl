@@ -1,4 +1,6 @@
+<!DOCTYPE html>
 <html>
+    <!-- Summary -->
     <head>
         <title>Plantlive</title>
     </head>
