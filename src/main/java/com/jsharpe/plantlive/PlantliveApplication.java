@@ -5,6 +5,7 @@ import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 
 public class PlantliveApplication extends Application<PlantliveConfiguration> {
 
@@ -28,6 +29,9 @@ public class PlantliveApplication extends Application<PlantliveConfiguration> {
                 return configuration.getDatabase();
             }
         });
+
+        // TODO Might want to override getViewConfiguration()
+        bootstrap.addBundle(new ViewBundle<>());
 
     }
 
