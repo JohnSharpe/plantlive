@@ -5,8 +5,9 @@ import com.jsharpe.plantlive.exceptions.ConsumeException;
 import com.jsharpe.plantlive.exceptions.IllegalPasswordException;
 import com.jsharpe.plantlive.models.Detail;
 import com.jsharpe.plantlive.models.Plant;
-import com.jsharpe.plantlive.repositories.MockInRepository;
-import com.jsharpe.plantlive.repositories.in.NopInRepository;
+import com.jsharpe.plantlive.repositories.MockRepository;
+import com.jsharpe.plantlive.repositories.details.in.NopDetailInRepository;
+import com.jsharpe.plantlive.repositories.plants.out.NopPlantOutRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -22,7 +23,8 @@ public class InServiceTest {
     public void testNoSuchPlant() throws ConsumeException {
         // Given
         final InService inService = new InService(
-                new NopInRepository(),
+                new NopPlantOutRepository(),
+                new NopDetailInRepository(),
                 24
         );
 
@@ -43,11 +45,12 @@ public class InServiceTest {
         // Given
         final Set<Plant> givenPlants = new HashSet<>();
         givenPlants.add(new Plant(-1, "super-secret", "cactus"));
-        final MockInRepository mockInRepository = new MockInRepository();
-        mockInRepository.populate(givenPlants, null);
+        final MockRepository mockRepository = new MockRepository();
+        mockRepository.populate(givenPlants, null);
 
         final InService inService = new InService(
-                mockInRepository,
+                mockRepository.getPlantOutRepository(),
+                mockRepository.getDetailInRepository(),
                 24
         );
 
@@ -71,11 +74,12 @@ public class InServiceTest {
 
         final Set<Plant> givenPlants = new HashSet<>();
         givenPlants.add(new Plant(-1, hashed, "cactus"));
-        final MockInRepository mockInRepository = new MockInRepository();
-        mockInRepository.populate(givenPlants, null);
+        final MockRepository mockRepository = new MockRepository();
+        mockRepository.populate(givenPlants, null);
 
         final InService inService = new InService(
-                mockInRepository,
+                mockRepository.getPlantOutRepository(),
+                mockRepository.getDetailInRepository(),
                 24
         );
 
@@ -100,11 +104,12 @@ public class InServiceTest {
 
         final Set<Plant> givenPlants = new HashSet<>();
         givenPlants.add(new Plant(-1, hashed, "tulip"));
-        final MockInRepository mockInRepository = new MockInRepository();
-        mockInRepository.populate(givenPlants, null);
+        final MockRepository mockRepository = new MockRepository();
+        mockRepository.populate(givenPlants, null);
 
         final InService inService = new InService(
-                mockInRepository,
+                mockRepository.getPlantOutRepository(),
+                mockRepository.getDetailInRepository(),
                 24
         );
 
@@ -112,7 +117,7 @@ public class InServiceTest {
         inService.write(1, password, timestamp, 23, 97, 44, 32);
 
         // Then
-        final Set<Detail> savedDetails = mockInRepository.getDetails();
+        final Set<Detail> savedDetails = mockRepository.getDetails();
         Assert.assertEquals(1, savedDetails.size());
 
         final Detail detail = savedDetails.stream().findFirst().orElseThrow(RuntimeException::new);

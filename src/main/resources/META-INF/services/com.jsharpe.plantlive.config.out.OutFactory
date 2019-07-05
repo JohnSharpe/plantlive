@@ -1,1 +1,2 @@
 com.jsharpe.plantlive.config.out.NopOutFactory
+com.jsharpe.plantlive.config.out.HttpOutFactory

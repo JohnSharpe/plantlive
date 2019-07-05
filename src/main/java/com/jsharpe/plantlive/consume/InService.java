@@ -2,7 +2,8 @@ package com.jsharpe.plantlive.consume;
 
 import com.jsharpe.plantlive.exceptions.ConsumeException;
 import com.jsharpe.plantlive.models.Plant;
-import com.jsharpe.plantlive.repositories.in.InRepository;
+import com.jsharpe.plantlive.repositories.details.in.DetailInRepository;
+import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,16 +19,19 @@ public class InService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InService.class);
 
-    private final InRepository inRepository;
+    private final PlantOutRepository plantOutRepository;
+    private final DetailInRepository detailInRepository;
 
     // TODO Could remove detail entries older than retentionHours
     private final int retentionHours;
 
     public InService(
-            final InRepository inRepository,
+            final PlantOutRepository plantOutRepository,
+            final DetailInRepository detailInRepository,
             final int retentionHours
     ) {
-        this.inRepository = inRepository;
+        this.plantOutRepository = plantOutRepository;
+        this.detailInRepository = detailInRepository;
         this.retentionHours = retentionHours;
     }
 
@@ -41,7 +45,7 @@ public class InService {
             final int conductivity
     ) throws ConsumeException {
 
-        final Optional<Plant> optionalPlant = this.inRepository.getPlant(plantId);
+        final Optional<Plant> optionalPlant = this.plantOutRepository.get(plantId);
 
         if (!optionalPlant.isPresent()) {
             final String problem = String.format("No plant with id [%d]", plantId);
@@ -67,7 +71,7 @@ public class InService {
 
         if (temperatureValid && humidityValid && lightValid && conductivityValid) {
             try {
-                this.inRepository.saveDetail(plantId, inTimestamp, temperature, humidity, light, conductivity);
+                this.detailInRepository.save(plantId, inTimestamp, temperature, humidity, light, conductivity);
             } catch (SQLException e) {
                 LOGGER.warn("SQL problem saving detail", e);
             }
