@@ -43,9 +43,19 @@ public class OutResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        // TODO This variable name isn't great
-        final Date yesterday = this.dateSupplier.getDate();
-        return this.detailOutRepository.getSummary(id, yesterday);
+        final Optional<Plant> plantOptional = this.plantOutRepository.get(id);
+
+        if (plantOptional.isPresent()) {
+
+            // TODO Use plant type to get some parameters.
+            final Plant plant = plantOptional.get();
+            final Date since = this.dateSupplier.getDate();
+            return this.detailOutRepository.getSummary(id, since);
+
+        } else {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
     }
 
     @GET

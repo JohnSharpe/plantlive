@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import javax.ws.rs.WebApplicationException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,18 +38,24 @@ public class ResourceTest {
         this.mockRepository.clear();
     }
 
-    @Test
-    public void testGetSummaryForNoPlant() {
+    @Test(expected = WebApplicationException.class)
+    public void testGetSummaryForNoPlantSpecified() {
         // Given
 
         // When
-        final Summary summary = outResource.getSummaryJson(1L);
+        this.outResource.getSummaryJson(null);
 
-        // Then
-        Assert.assertEquals(0, summary.getTemperature(), 0.00000001);
-        Assert.assertEquals(0, summary.getHumidity(), 0.00000001);
-        Assert.assertEquals(0, summary.getLight(), 0.00000001);
-        Assert.assertEquals(0, summary.getConductivity(), 0.00000001);
+        // Then (exception)
+    }
+
+    @Test(expected = WebApplicationException.class)
+    public void testGetSummaryForNoPlantInExistence() {
+        // Given
+
+        // When
+        this.outResource.getSummaryJson(1L);
+
+        // Then (exception)
     }
 
     @Test
