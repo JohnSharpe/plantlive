@@ -1,25 +1,30 @@
 package com.jsharpe.plantlive.resources;
 
 import com.jsharpe.plantlive.api.Summary;
+import com.jsharpe.plantlive.repositories.details.out.DetailOutRepository;
+import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
 import com.jsharpe.plantlive.resources.date.DateSupplier;
-import com.jsharpe.plantlive.repositories.out.OutRepository;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.Date;
-import java.util.Optional;
 
 public class OutResource {
 
-    private final OutRepository outRepository;
+    private final PlantOutRepository plantOutRepository;
+    private final DetailOutRepository detailOutRepository;
     private final DateSupplier dateSupplier;
 
     public OutResource(
-            final OutRepository outRepository,
+            final PlantOutRepository plantOutRepository,
+            final DetailOutRepository detailOutRepository,
             final DateSupplier dateSupplier
     ) {
-        this.outRepository = outRepository;
+        this.plantOutRepository = plantOutRepository;
+        this.detailOutRepository = detailOutRepository;
         this.dateSupplier = dateSupplier;
     }
 
@@ -30,13 +35,7 @@ public class OutResource {
 
         // TODO This variable name isn't great
         final Date yesterday = this.dateSupplier.getDate();
-        final Optional<Summary> summaryOptional = this.outRepository.getSummary(id, yesterday);
-
-        if (summaryOptional.isPresent()) {
-            return summaryOptional.get();
-        } else {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
+        return this.detailOutRepository.getSummary(id, yesterday);
 
     }
 

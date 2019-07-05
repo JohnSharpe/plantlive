@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.jsharpe.plantlive.repositories.RepositoryWrapper;
-import com.jsharpe.plantlive.repositories.in.InRepository;
-import com.jsharpe.plantlive.repositories.out.OutRepository;
+import com.jsharpe.plantlive.repositories.details.in.DetailInRepository;
+import com.jsharpe.plantlive.repositories.details.out.DetailOutRepository;
+import com.jsharpe.plantlive.repositories.plants.in.NopPlantInRepository;
+import com.jsharpe.plantlive.repositories.plants.in.PlantInRepository;
+import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Environment;
@@ -37,13 +40,18 @@ public class SqlPersistenceFactory implements PersistenceFactory {
         final Jdbi jdbi = new JdbiFactory().build(environment, this.database, "sql");
 
         // Create
-        final InRepository inRepository = jdbi.onDemand(InRepository.class);
-        final OutRepository outRepository = jdbi.onDemand(OutRepository.class);
+        final PlantInRepository plantInRepository = new NopPlantInRepository();
+        // final PlantInRepository plantInRepository = jdbi.onDemand(PlantInRepository.class);
+        final PlantOutRepository plantOutRepository = jdbi.onDemand(PlantOutRepository.class);
+        final DetailInRepository detailInRepository = jdbi.onDemand(DetailInRepository.class);
+        final DetailOutRepository detailOutRepository = jdbi.onDemand(DetailOutRepository.class);
 
         // Register
-        environment.jersey().register(inRepository);
-        environment.jersey().register(outRepository);
+        // environment.jersey().register(plantInRepository);
+        environment.jersey().register(plantOutRepository);
+        environment.jersey().register(detailInRepository);
+        environment.jersey().register(detailOutRepository);
 
-        return new RepositoryWrapper(inRepository, outRepository);
+        return new RepositoryWrapper(plantInRepository, plantOutRepository, detailInRepository, detailOutRepository);
     }
 }

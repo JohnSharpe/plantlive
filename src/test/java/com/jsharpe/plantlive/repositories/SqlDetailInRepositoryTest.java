@@ -3,8 +3,7 @@ package com.jsharpe.plantlive.repositories;
 import com.jsharpe.plantlive.IntegrationTest;
 import com.jsharpe.plantlive.PlantliveApplication;
 import com.jsharpe.plantlive.PlantliveConfiguration;
-import com.jsharpe.plantlive.models.Plant;
-import com.jsharpe.plantlive.repositories.in.InRepository;
+import com.jsharpe.plantlive.repositories.details.in.DetailInRepository;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.testing.ResourceHelpers;
@@ -21,10 +20,9 @@ import org.junit.experimental.categories.Category;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Optional;
 
 @Category(IntegrationTest.class)
-public class SqlInRepositoryTest {
+public class SqlDetailInRepositoryTest {
 
     @ClassRule
     public static final DropwizardAppRule<PlantliveConfiguration> RULE =
@@ -33,7 +31,7 @@ public class SqlInRepositoryTest {
     private static final String FIXTURES_ROOT = "fixtures/sql/";
 
     private static Jdbi JDBI;
-    private static InRepository IN_REPOSITORY;
+    private static DetailInRepository DETAIL_IN_REPOSITORY;
 
     @BeforeClass
     public static void setupClass() throws LiquibaseException, SQLException {
@@ -51,7 +49,7 @@ public class SqlInRepositoryTest {
         }
 
         JDBI = new JdbiFactory().build(RULE.getEnvironment(), RULE.getConfiguration().getDatabase(), "sql");
-        IN_REPOSITORY = JDBI.onDemand(InRepository.class);
+        DETAIL_IN_REPOSITORY = JDBI.onDemand(DetailInRepository.class);
     }
 
     @After
@@ -60,38 +58,12 @@ public class SqlInRepositoryTest {
     }
 
     @Test
-    public void testGetNonExistentPlant() {
-        // Given
-
-        // When
-        final Optional<Plant> plantOptional = IN_REPOSITORY.getPlant(1);
-
-        // Then
-        Assert.assertFalse(plantOptional.isPresent());
-    }
-
-    @Test
-    public void getExistentPlant() {
-        // Given
-        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
-
-        // When
-        final Optional<Plant> plantOptional = IN_REPOSITORY.getPlant(1);
-
-        // Then
-        Assert.assertTrue(plantOptional.isPresent());
-        final Plant plant = plantOptional.get();
-        Assert.assertEquals("a", plant.getPassword());
-        Assert.assertEquals("cactus", plant.getType());
-    }
-
-    @Test
     public void writeDetail() throws SQLException {
         // Given
         SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
 
         // When
-        final int rows = IN_REPOSITORY.saveDetail(3, new Date(), 20, 89, 32, 12);
+        final int rows = DETAIL_IN_REPOSITORY.save(3, new Date(), 20, 89, 32, 12);
 
         // Then
         Assert.assertEquals(1, rows);
@@ -103,7 +75,7 @@ public class SqlInRepositoryTest {
         SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
 
         // When
-        IN_REPOSITORY.saveDetail(4, new Date(), 20, 89, 32, 12);
+        DETAIL_IN_REPOSITORY.save(4, new Date(), 20, 89, 32, 12);
 
         // Then (exception)
     }

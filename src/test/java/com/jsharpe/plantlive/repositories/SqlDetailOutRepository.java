@@ -4,7 +4,7 @@ import com.jsharpe.plantlive.IntegrationTest;
 import com.jsharpe.plantlive.PlantliveApplication;
 import com.jsharpe.plantlive.PlantliveConfiguration;
 import com.jsharpe.plantlive.api.Summary;
-import com.jsharpe.plantlive.repositories.out.OutRepository;
+import com.jsharpe.plantlive.repositories.details.out.DetailOutRepository;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.testing.ResourceHelpers;
@@ -21,10 +21,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
 
 @Category(IntegrationTest.class)
-public class SqlOutRepositoryTest {
+public class SqlDetailOutRepository {
 
     @ClassRule
     public static final DropwizardAppRule<PlantliveConfiguration> RULE =
@@ -33,7 +32,7 @@ public class SqlOutRepositoryTest {
     private static final String FIXTURES_ROOT = "fixtures/sql/";
 
     private static Jdbi JDBI;
-    private static OutRepository OUT_REPOSITORY;
+    private static DetailOutRepository DETAIL_OUT_REPOSITORY;
 
     @BeforeClass
     public static void setupClass() throws LiquibaseException, SQLException {
@@ -51,7 +50,7 @@ public class SqlOutRepositoryTest {
         }
 
         JDBI = new JdbiFactory().build(RULE.getEnvironment(), RULE.getConfiguration().getDatabase(), "sql");
-        OUT_REPOSITORY = JDBI.onDemand(OutRepository.class);
+        DETAIL_OUT_REPOSITORY = JDBI.onDemand(DetailOutRepository.class);
     }
 
     @After
@@ -72,14 +71,11 @@ public class SqlOutRepositoryTest {
         }
 
         // When
-        final Optional<Summary> summaryOptional = OUT_REPOSITORY.getSummary(id, since);
+        final Summary summary = DETAIL_OUT_REPOSITORY.getSummary(id, since);
 
         // Then
-        Assert.assertTrue(summaryOptional.isPresent());
-        final Summary summary = summaryOptional.get();
+        Assert.assertNotNull(summary);
 
-//        Assert.assertEquals(2, summary.getId());
-//        Assert.assertEquals("rose", summary.getType());
         Assert.assertEquals(22.0, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(83.2, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(43.8, summary.getLight(), 0.0000000001);
@@ -99,14 +95,11 @@ public class SqlOutRepositoryTest {
         }
 
         // When
-        final Optional<Summary> summaryOptional = OUT_REPOSITORY.getSummary(id, since);
+        final Summary summary = DETAIL_OUT_REPOSITORY.getSummary(id, since);
 
         // Then
-        Assert.assertTrue(summaryOptional.isPresent());
-        final Summary summary = summaryOptional.get();
+        Assert.assertNotNull(summary);
 
-//        Assert.assertEquals(2, summary.getId());
-//        Assert.assertEquals("rose", summary.getType());
         Assert.assertEquals(23.4, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(81.4, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(43.8, summary.getLight(), 0.0000000001);
@@ -126,14 +119,11 @@ public class SqlOutRepositoryTest {
         }
 
         // When
-        final Optional<Summary> summaryOptional = OUT_REPOSITORY.getSummary(id, since);
+        final Summary summary = DETAIL_OUT_REPOSITORY.getSummary(id, since);
 
         // Then
-        Assert.assertTrue(summaryOptional.isPresent());
-        final Summary summary = summaryOptional.get();
+        Assert.assertNotNull(summary);
 
-//        Assert.assertEquals(3, summary.getId());
-//        Assert.assertEquals("dandelion", summary.getType());
         Assert.assertEquals(0, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(0, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(0, summary.getLight(), 0.0000000001);

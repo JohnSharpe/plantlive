@@ -5,7 +5,7 @@ import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.consume.PasswordHasher;
 import com.jsharpe.plantlive.models.Detail;
 import com.jsharpe.plantlive.models.Plant;
-import com.jsharpe.plantlive.repositories.MockInRepository;
+import com.jsharpe.plantlive.repositories.MockRepository;
 import com.rabbitmq.client.AuthenticationFailureException;
 import com.rabbitmq.client.ConnectionFactory;
 import org.junit.Assert;
@@ -21,12 +21,12 @@ import java.util.concurrent.TimeoutException;
 @Category(IntegrationTest.class)
 public class RabbitConsumerTest {
 
-    private final MockInRepository inRepository;
+    private final MockRepository mockRepository;
     private final LocalRabbitPublisher localRabbitPublisher;
     private final InService inService;
 
     public RabbitConsumerTest() throws IOException, TimeoutException {
-        this.inRepository = new MockInRepository();
+        this.mockRepository = new MockRepository();
 
         this.localRabbitPublisher = new LocalRabbitPublisher(
                 "127.0.0.1",
@@ -37,12 +37,16 @@ public class RabbitConsumerTest {
                 "plantlive"
         );
 
-        this.inService = new InService(this.inRepository, 24);
+        this.inService = new InService(
+                this.mockRepository.getPlantOutRepository(),
+                this.mockRepository.getDetailInRepository(),
+                24
+        );
     }
 
     @Before
     public void before() {
-        this.inRepository.clear();
+        this.mockRepository.clear();
     }
 
     @Test(expected = AuthenticationFailureException.class)
@@ -120,14 +124,14 @@ public class RabbitConsumerTest {
 
         final Set<Plant> givenPlants = new HashSet<>();
         givenPlants.add(new Plant(-1, PasswordHasher.hash("1234"), "cactus"));
-        this.inRepository.populate(givenPlants, null);
+        this.mockRepository.populate(givenPlants, null);
 
         // When
         this.localRabbitPublisher.publish("1;1234;2;3;4;5");
         Thread.sleep(500);
 
         // Then
-        final Set<Detail> details = this.inRepository.getDetails();
+        final Set<Detail> details = this.mockRepository.getDetails();
         Assert.assertEquals(1, details.size());
 
         final Detail detail = details.iterator().next();
@@ -155,7 +159,7 @@ public class RabbitConsumerTest {
 
         final Set<Plant> givenPlants = new HashSet<>();
         givenPlants.add(new Plant(-1, PasswordHasher.hash("1234"), "cactus"));
-        this.inRepository.populate(givenPlants, null);
+        this.mockRepository.populate(givenPlants, null);
 
         // When
         // No such plant!
@@ -165,7 +169,7 @@ public class RabbitConsumerTest {
         Thread.sleep(500);
 
         // Then
-        final Set<Detail> details = this.inRepository.getDetails();
+        final Set<Detail> details = this.mockRepository.getDetails();
         Assert.assertEquals(1, details.size());
 
         final Detail detail = details.iterator().next();
