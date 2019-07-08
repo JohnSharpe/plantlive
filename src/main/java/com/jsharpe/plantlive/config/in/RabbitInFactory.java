@@ -13,7 +13,6 @@ import io.dropwizard.setup.Environment;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @JsonTypeName("rabbit")
@@ -42,11 +41,6 @@ public class RabbitInFactory implements InFactory {
     @NotNull
     private final String queue;
 
-    @Valid
-    @NotNull
-    @Min(0) // 0 = keep forever?
-    private final Integer retentionHours;
-
     // TODO Any other consumer configuration here
 
     @JsonCreator
@@ -56,8 +50,7 @@ public class RabbitInFactory implements InFactory {
             @JsonProperty("username") String username,
             @JsonProperty("password") String password,
             @JsonProperty("vhost") String vhost,
-            @JsonProperty("queue") String queue,
-            @JsonProperty("retentionHours") Integer retentionHours
+            @JsonProperty("queue") String queue
     ) {
         this.host = host;
         this.port = port;
@@ -65,7 +58,6 @@ public class RabbitInFactory implements InFactory {
         this.password = password;
         this.vhost = vhost;
         this.queue = queue;
-        this.retentionHours = retentionHours;
     }
 
     @Override
@@ -77,8 +69,7 @@ public class RabbitInFactory implements InFactory {
 
         final InService inService = new InService(
                 plantOutRepository,
-                detailInRepository,
-                this.retentionHours
+                detailInRepository
         );
 
         final ConnectionFactory connectionFactory = new ConnectionFactory();

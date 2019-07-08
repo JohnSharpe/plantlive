@@ -22,27 +22,19 @@ public class InService {
     private final PlantOutRepository plantOutRepository;
     private final DetailInRepository detailInRepository;
 
-    // TODO Could remove detail entries older than retentionHours
-    private final int retentionHours;
-
-    public InService(
-            final PlantOutRepository plantOutRepository,
-            final DetailInRepository detailInRepository,
-            final int retentionHours
-    ) {
+    public InService(final PlantOutRepository plantOutRepository, final DetailInRepository detailInRepository) {
         this.plantOutRepository = plantOutRepository;
         this.detailInRepository = detailInRepository;
-        this.retentionHours = retentionHours;
     }
 
     public void write(
             final long plantId,
             final String password,
             final Date inTimestamp,
-            final int temperature,
-            final int humidity,
-            final int light,
-            final int conductivity
+            final double temperature,
+            final double humidity,
+            final double light,
+            final double conductivity
     ) throws ConsumeException {
 
         final Optional<Plant> optionalPlant = this.plantOutRepository.get(plantId);
@@ -77,7 +69,7 @@ public class InService {
             }
         } else {
             final String problem = String.format(
-                    "Data invalid for detail - plantId: [%d], inTimestamp: [%s], temp: [%d], hum: [%d], light: [%d], cond: [%d]",
+                    "Data invalid for detail - plantId: [%d], inTimestamp: [%s], temp: [%f], hum: [%f], light: [%f], cond: [%f]",
                     plantId, inTimestamp, temperature, humidity, light, conductivity
             );
             LOGGER.warn(problem);
@@ -89,7 +81,7 @@ public class InService {
     // TODO This could do with being pulled out and unit tested, it is likely to change
     // TODO Also, different verification is likely to take place on the different numbers...
     // TODO e.g temperature probably won't be 0 to infinity
-    private boolean verify(int candidate) {
+    private boolean verify(double candidate) {
         return candidate >= 0;
     }
 

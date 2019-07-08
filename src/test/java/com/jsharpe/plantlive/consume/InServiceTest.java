@@ -24,8 +24,7 @@ public class InServiceTest {
         // Given
         final InService inService = new InService(
                 new NopPlantOutRepository(),
-                new NopDetailInRepository(),
-                24
+                new NopDetailInRepository()
         );
 
         // When
@@ -50,8 +49,7 @@ public class InServiceTest {
 
         final InService inService = new InService(
                 mockRepository.getPlantOutRepository(),
-                mockRepository.getDetailInRepository(),
-                24
+                mockRepository.getDetailInRepository()
         );
 
         // When
@@ -79,8 +77,7 @@ public class InServiceTest {
 
         final InService inService = new InService(
                 mockRepository.getPlantOutRepository(),
-                mockRepository.getDetailInRepository(),
-                24
+                mockRepository.getDetailInRepository()
         );
 
         // When
@@ -88,10 +85,10 @@ public class InServiceTest {
                 1,
                 password,
                 new Date(),
-                -300,
-                20,
-                30,
-                40
+                -300.0,
+                20.0,
+                30.0,
+                40.0
         );
     }
 
@@ -109,8 +106,7 @@ public class InServiceTest {
 
         final InService inService = new InService(
                 mockRepository.getPlantOutRepository(),
-                mockRepository.getDetailInRepository(),
-                24
+                mockRepository.getDetailInRepository()
         );
 
         // When
@@ -123,10 +119,10 @@ public class InServiceTest {
         final Detail detail = savedDetails.stream().findFirst().orElseThrow(RuntimeException::new);
         Assert.assertEquals(1, detail.getPlantId());
         Assert.assertEquals(timestamp, detail.getInTimestamp());
-        Assert.assertEquals(23, detail.getTemperature());
-        Assert.assertEquals(97, detail.getHumidity());
-        Assert.assertEquals(44, detail.getLight());
-        Assert.assertEquals(32, detail.getConductivity());
+        Assert.assertEquals(23, detail.getTemperature(), 0.0000001);
+        Assert.assertEquals(97, detail.getHumidity(), 0.0000001);
+        Assert.assertEquals(44, detail.getLight(), 0.0000001);
+        Assert.assertEquals(32, detail.getConductivity(), 0.0000001);
     }
 
 }

@@ -30,16 +30,16 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="temperature" type="bigint">
+            <column name="temperature" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="humidity" type="bigint">
+            <column name="humidity" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="light" type="bigint">
+            <column name="light" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="conductivity" type="bigint">
+            <column name="conductivity" type="double">
                 <constraints nullable="false"/>
             </column>
         </createTable>

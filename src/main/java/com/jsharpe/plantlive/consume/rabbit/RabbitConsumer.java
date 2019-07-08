@@ -72,10 +72,10 @@ public class RabbitConsumer implements Managed {
                                 Long.valueOf(messageParts[0]),
                                 messageParts[1],
                                 delivery.getProperties().getTimestamp(),
-                                Integer.valueOf(messageParts[2]),
-                                Integer.valueOf(messageParts[3]),
-                                Integer.valueOf(messageParts[4]),
-                                Integer.valueOf(messageParts[5])
+                                Double.valueOf(messageParts[2]),
+                                Double.valueOf(messageParts[3]),
+                                Double.valueOf(messageParts[4]),
+                                Double.valueOf(messageParts[5])
                         );
                     } catch (ConsumeException e) {
                         LOGGER.warn("Cannot consume message!", e);
