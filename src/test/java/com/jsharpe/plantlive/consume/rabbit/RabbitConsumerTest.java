@@ -39,8 +39,7 @@ public class RabbitConsumerTest {
 
         this.inService = new InService(
                 this.mockRepository.getPlantOutRepository(),
-                this.mockRepository.getDetailInRepository(),
-                24
+                this.mockRepository.getDetailInRepository()
         );
     }
 
@@ -135,10 +134,10 @@ public class RabbitConsumerTest {
         Assert.assertEquals(1, details.size());
 
         final Detail detail = details.iterator().next();
-        Assert.assertEquals(2, detail.getTemperature());
-        Assert.assertEquals(3, detail.getHumidity());
-        Assert.assertEquals(4, detail.getLight());
-        Assert.assertEquals(5, detail.getConductivity());
+        Assert.assertEquals(2, detail.getTemperature(), 0.000001);
+        Assert.assertEquals(3, detail.getHumidity(), 0.000001);
+        Assert.assertEquals(4, detail.getLight(), 0.000001);
+        Assert.assertEquals(5, detail.getConductivity(), 0.000001);
     }
 
     @Test
@@ -173,10 +172,10 @@ public class RabbitConsumerTest {
         Assert.assertEquals(1, details.size());
 
         final Detail detail = details.iterator().next();
-        Assert.assertEquals(2, detail.getTemperature());
-        Assert.assertEquals(3, detail.getHumidity());
-        Assert.assertEquals(4, detail.getLight());
-        Assert.assertEquals(5, detail.getConductivity());
+        Assert.assertEquals(2, detail.getTemperature(), 0.000001);
+        Assert.assertEquals(3, detail.getHumidity(), 0.000001);
+        Assert.assertEquals(4, detail.getLight(), 0.000001);
+        Assert.assertEquals(5, detail.getConductivity(), 0.000001);
     }
 
     // TODO more!

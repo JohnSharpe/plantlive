@@ -8,7 +8,6 @@ import com.jsharpe.plantlive.repositories.details.out.DetailOutRepository;
 import com.jsharpe.plantlive.repositories.plants.in.PlantInRepository;
 import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -134,7 +133,7 @@ public class MockRepository {
         }
 
         @Override
-        public int save(long plantId, Date inTimestamp, int temperature, int humidity, int light, int conductivity) throws SQLException {
+        public int save(long plantId, Date inTimestamp, double temperature, double humidity, double light, double conductivity) {
             details.add(new Detail(lastDetailId.incrementAndGet(), plantId, inTimestamp, temperature, humidity, light, conductivity));
             return 1;
         }

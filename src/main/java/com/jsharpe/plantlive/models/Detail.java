@@ -8,12 +8,20 @@ public class Detail {
     private final long plantId;
 
     private final Date inTimestamp;
-    private final int temperature;
-    private final int humidity;
-    private final int light;
-    private final int conductivity;
+    private final double temperature;
+    private final double humidity;
+    private final double light;
+    private final double conductivity;
 
-    public Detail(long id, long plantId, Date inTimestamp, int temperature, int humidity, int light, int conductivity) {
+    public Detail(
+            final long id,
+            final long plantId,
+            final Date inTimestamp,
+            final double temperature,
+            final double humidity,
+            final double light,
+            final double conductivity
+    ) {
         this.id = id;
         this.plantId = plantId;
         this.inTimestamp = inTimestamp;
@@ -35,19 +43,19 @@ public class Detail {
         return inTimestamp;
     }
 
-    public int getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
 
-    public int getHumidity() {
+    public double getHumidity() {
         return humidity;
     }
 
-    public int getLight() {
+    public double getLight() {
         return light;
     }
 
-    public int getConductivity() {
+    public double getConductivity() {
         return conductivity;
     }
 
