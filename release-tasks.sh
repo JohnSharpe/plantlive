@@ -7,6 +7,8 @@ DATABASE_URL=${DATABASE_URL}
 [[ -z "$PORT" ]] && echo 'PORT must be set.' && exit 1;
 [[ -z "$DATABASE_URL" ]] && echo 'DATABASE_URL must be set.' && exit 1;
 
+echo "Writing configuration with port: $PORT and database url: $DATABASE_URL"
+
 # jdbc:postgresql:// + (Replace everything before & including the @ with blank)
 DATABASE_JDBC_URL="jdbc:postgresql://$(echo ${DATABASE_URL} | sed 's/.*@//' )"
 
