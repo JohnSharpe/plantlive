@@ -4,8 +4,8 @@ PORT=${PORT}
 DATABASE_URL=${DATABASE_URL}
 
 # Fail if any of these environment variables are unset
-[[ -z "$PORT" ]] && exit 1;
-[[ -z "$DATABASE_URL" ]] && exit 1;
+[[ -z "$PORT" ]] && echo 'PORT must be set.' && exit 1;
+[[ -z "$DATABASE_URL" ]] && echo 'DATABASE_URL must be set.' && exit 1;
 
 # jdbc:postgresql:// + (Replace everything before & including the @ with blank)
 DATABASE_JDBC_URL="jdbc:postgresql://$(echo ${DATABASE_URL} | sed 's/.*@//' )"
@@ -49,7 +49,7 @@ persistence:
     maxWaitForConnection: 1s
 
     # the SQL query to run when validating a connection's liveness
-    validationQuery: "/* MyService Health Check */ SELECT 1"
+    validationQuery: '/* MyService Health Check */ SELECT 1'
 
     # the timeout before a connection validation queries fail
     validationQueryTimeout: 3s
@@ -68,7 +68,7 @@ persistence:
     minIdleTime: 1 minute
 
 in:
-  type:nop
+  type: nop
 
 #in:
   #type: rabbit
