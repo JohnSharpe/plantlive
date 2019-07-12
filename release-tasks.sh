@@ -25,9 +25,6 @@ server:
   applicationConnectors:
     - type: http
       port: $PORT
-  adminConnectors:
-    - type: http
-      port: 4000
 
 persistence:
   type: sql
