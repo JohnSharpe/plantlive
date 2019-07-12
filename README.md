@@ -2,6 +2,8 @@
 A Dropwizard application to read sensor data from a queue, save to a database and serve up a summary.
 Currently implemented as a RabbitMQ consumer, connection to an SQL database and some HTTP endpoints.
 
+The project is running in a limited capacity (read: I have no money) on [Heroku](https://plantlive.herokuapp.com/). Eventually I'll configure Rabbit and get some data into the application.
+
 ## Configuration
 See the yml files in `src/test/resources` for examples.
 
