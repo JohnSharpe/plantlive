@@ -80,7 +80,4 @@ in:
 
 out:
   type: http
-" > config.yml
-
-# Migrate the database
-java -jar target/plantlive-1.0-SNAPSHOT.jar db migrate config.yml
+" > target/config.yml

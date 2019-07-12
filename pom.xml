@@ -21,6 +21,7 @@
 
         <surefire.version>3.0.0-M3</surefire.version>
         <docker-maven-plugin.version>0.30.0</docker-maven-plugin.version>
+        <exec.version>1.6.0</exec.version>
 
         <rabbitmq.image.version>3.7.15-management</rabbitmq.image.version>
 
@@ -269,5 +270,33 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>heroku</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec.version}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-config</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <commandlineArgs>release-tasks.sh</commandlineArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
