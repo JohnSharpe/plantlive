@@ -19,14 +19,14 @@ public class MockRepository {
     private final AtomicLong LAST_DETAIL_ID = new AtomicLong(0);
     private final Set<Detail> DETAILS = new HashSet<>();
 
-    // private final PlantInRepository plantInRepository;
+     private final PlantInRepository plantInRepository;
     private final PlantOutRepository plantOutRepository;
     private final DetailInRepository detailInRepository;
     private final DetailOutRepository detailOutRepository;
 
     public MockRepository() {
         this.clear();
-        // this.plantInRepository = new PlantIn(LAST_PLANT_ID, PLANTS);
+         this.plantInRepository = new PlantIn(LAST_PLANT_ID, PLANTS);
         this.plantOutRepository = new PlantOut(PLANTS);
         this.detailInRepository = new DetailIn(LAST_DETAIL_ID, DETAILS);
         this.detailOutRepository = new DetailOut(PLANTS, DETAILS);
@@ -70,9 +70,9 @@ public class MockRepository {
         return DETAILS;
     }
 
-    // public PlantInRepository getPlantInRepository() {
-    //     return plantInRepository;
-    // }
+     public PlantInRepository getPlantInRepository() {
+         return plantInRepository;
+     }
 
     public PlantOutRepository getPlantOutRepository() {
         return plantOutRepository;
@@ -91,20 +91,24 @@ public class MockRepository {
         private final AtomicLong lastPlantId;
         private final Set<Plant> plants;
 
-        public PlantIn(AtomicLong lastPlantId, Set<Plant> plants) {
+        PlantIn(AtomicLong lastPlantId, Set<Plant> plants) {
             this.lastPlantId = lastPlantId;
             this.plants = plants;
         }
 
-        // TODO
-
+        @Override
+        public int save(UUID userId, String password, String type) {
+            final Plant plant = new Plant(lastPlantId.incrementAndGet(), userId, password, type);
+            this.plants.add(plant);
+            return 1;
+        }
     }
 
     public static class PlantOut implements PlantOutRepository {
 
         private final Set<Plant> plants;
 
-        public PlantOut(Set<Plant> plants) {
+        PlantOut(Set<Plant> plants) {
             this.plants = plants;
         }
 
@@ -125,7 +129,7 @@ public class MockRepository {
         private final AtomicLong lastDetailId;
         private final Set<Detail> details;
 
-        public DetailIn(AtomicLong lastDetailId, Set<Detail> details) {
+        DetailIn(AtomicLong lastDetailId, Set<Detail> details) {
             this.lastDetailId = lastDetailId;
             this.details = details;
         }
@@ -142,7 +146,7 @@ public class MockRepository {
         private final Set<Plant> plants;
         private final Set<Detail> details;
 
-        public DetailOut(Set<Plant> plants, Set<Detail> details) {
+        DetailOut(Set<Plant> plants, Set<Detail> details) {
             this.plants = plants;
             this.details = details;
         }
