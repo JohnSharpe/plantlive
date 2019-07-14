@@ -17,6 +17,7 @@ import javax.ws.rs.WebApplicationException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Category(UnitTest.class)
 public class ResourceTest {
@@ -53,7 +54,7 @@ public class ResourceTest {
         // Given
 
         // When
-        this.outResource.getSummaryJson(1L);
+        this.outResource.getSummaryJson(UUID.randomUUID());
 
         // Then (exception)
     }
@@ -61,15 +62,16 @@ public class ResourceTest {
     @Test
     public void testGetSummaryForAPlant() throws IllegalPasswordException {
         // Given
+        final UUID userId = UUID.randomUUID();
         final Set<Plant> plants = new HashSet<>();
-        plants.add(new Plant(1, PasswordHasher.hash("password"), "cactus"));
+        plants.add(new Plant(1, userId, PasswordHasher.hash("password"), "cactus"));
         final Set<Detail> details = new HashSet<>();
         details.add(new Detail(1, 1, new Date(), 10, 20, 30, 40));
         details.add(new Detail(2, 1, new Date(), 20, 30, 40, 50));
         this.mockRepository.populate(plants, details);
 
         // When
-        final Summary summary = outResource.getSummaryJson(1L);
+        final Summary summary = outResource.getSummaryJson(userId);
 
         // Then
         Assert.assertEquals(15, summary.getTemperature(), 0.00000001);

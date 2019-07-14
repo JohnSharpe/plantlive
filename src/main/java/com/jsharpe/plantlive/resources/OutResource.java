@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Path("/")
 public class OutResource {
@@ -37,20 +38,20 @@ public class OutResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Summary getSummaryJson(@QueryParam("id") Long id) {
+    public Summary getSummaryJson(@QueryParam("id") UUID userId) {
 
-        if (id == null) {
+        if (userId == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        final Optional<Plant> plantOptional = this.plantOutRepository.get(id);
+        final Optional<Plant> plantOptional = this.plantOutRepository.getByUserId(userId);
 
         if (plantOptional.isPresent()) {
 
-            // TODO Use plant type to get some parameters.
+            // TODO Use plant type to get some parameters
             final Plant plant = plantOptional.get();
             final Date since = this.dateSupplier.getDate();
-            return this.detailOutRepository.getSummary(id, since);
+            return this.detailOutRepository.getSummary(plant.getId(), since);
 
         } else {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -60,19 +61,19 @@ public class OutResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public View getSummaryHtml(@QueryParam("id") Long id) {
+    public View getSummaryHtml(@QueryParam("id") UUID userId) {
 
-        if (id == null) {
+        if (userId == null) {
             return STANDARD_VIEW;
         } else {
-            final Optional<Plant> plantOptional = this.plantOutRepository.get(id);
+            final Optional<Plant> plantOptional = this.plantOutRepository.getByUserId(userId);
 
             if (plantOptional.isPresent()) {
 
                 // TODO Use plant type to get some parameters.
                 final Plant plant = plantOptional.get();
                 final Date since = this.dateSupplier.getDate();
-                final Summary summary = this.detailOutRepository.getSummary(id, since);
+                final Summary summary = this.detailOutRepository.getSummary(plant.getId(), since);
                 return new SummaryView(summary);
 
             } else {

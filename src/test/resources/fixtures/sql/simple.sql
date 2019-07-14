@@ -1,6 +1,6 @@
-INSERT INTO plants (id, password, type) VALUES (1, 'a', 'cactus');
-INSERT INTO plants (id, password, type) VALUES (2, 'b', 'rose');
-INSERT INTO plants (id, password, type) VALUES (3, 'c', 'dandelion');
+INSERT INTO plants (id, user_id, password, type) VALUES (1, 'a483df51-e18e-4053-9875-6c753ca14997', 'a', 'cactus');
+INSERT INTO plants (id, user_id, password, type) VALUES (2, '8159e4e2-700b-406c-865c-65f08d341572', 'b', 'rose');
+INSERT INTO plants (id, user_id, password, type) VALUES (3, '03adf61a-fada-45e8-a88e-af0c2f97b9d3', 'c', 'dandelion');
 
 ALTER SEQUENCE plants_id_seq RESTART WITH 4;
 

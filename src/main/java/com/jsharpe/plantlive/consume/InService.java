@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * A container for the domain-logic of writing data from a consumer to a repository.
@@ -28,7 +29,7 @@ public class InService {
     }
 
     public void write(
-            final long plantId,
+            final UUID userId,
             final String password,
             final Date inTimestamp,
             final double temperature,
@@ -37,10 +38,10 @@ public class InService {
             final double conductivity
     ) throws ConsumeException {
 
-        final Optional<Plant> optionalPlant = this.plantOutRepository.get(plantId);
+        final Optional<Plant> optionalPlant = this.plantOutRepository.getByUserId(userId);
 
         if (!optionalPlant.isPresent()) {
-            final String problem = String.format("No plant with id [%d]", plantId);
+            final String problem = String.format("No plant with user id [%s]", userId);
             LOGGER.warn(problem);
             throw new ConsumeException(problem);
         }
@@ -48,7 +49,7 @@ public class InService {
         final Plant plant = optionalPlant.get();
 
         if (!PasswordHasher.verify(plant.getPassword(), password)) {
-            final String problem = String.format("Password [%s] is incorrect for plant with id [%d]", password, plantId);
+            final String problem = String.format("Password [%s] is incorrect for plant with user id [%s]", password, userId);
             LOGGER.warn(problem);
             throw new ConsumeException(problem);
         }
@@ -63,14 +64,14 @@ public class InService {
 
         if (temperatureValid && humidityValid && lightValid && conductivityValid) {
             try {
-                this.detailInRepository.save(plantId, inTimestamp, temperature, humidity, light, conductivity);
+                this.detailInRepository.save(plant.getId(), inTimestamp, temperature, humidity, light, conductivity);
             } catch (SQLException e) {
                 LOGGER.warn("SQL problem saving detail", e);
             }
         } else {
             final String problem = String.format(
                     "Data invalid for detail - plantId: [%d], inTimestamp: [%s], temp: [%f], hum: [%f], light: [%f], cond: [%f]",
-                    plantId, inTimestamp, temperature, humidity, light, conductivity
+                    plant.getId(), inTimestamp, temperature, humidity, light, conductivity
             );
             LOGGER.warn(problem);
             throw new ConsumeException(problem);

@@ -8,10 +8,7 @@ import com.jsharpe.plantlive.repositories.details.out.DetailOutRepository;
 import com.jsharpe.plantlive.repositories.plants.in.PlantInRepository;
 import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class MockRepository {
@@ -46,6 +43,7 @@ public class MockRepository {
         if (plants != null) {
             plants.forEach(plant -> PLANTS.add(new Plant(
                     LAST_PLANT_ID.incrementAndGet(),
+                    plant.getUserId(),
                     plant.getPassword(),
                     plant.getType()
             )));
@@ -111,9 +109,9 @@ public class MockRepository {
         }
 
         @Override
-        public Optional<Plant> get(long id) {
+        public Optional<Plant> getByUserId(UUID userId) {
             for (final Plant plant : this.plants) {
-                if (plant.getId() == id) {
+                if (plant.getUserId().equals(userId)) {
                     return Optional.of(plant);
                 }
             }
