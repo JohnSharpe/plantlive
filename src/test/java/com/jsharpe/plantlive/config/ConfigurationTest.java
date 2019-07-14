@@ -8,6 +8,11 @@ import com.jsharpe.plantlive.config.out.NopOutFactory;
 import com.jsharpe.plantlive.config.out.OutFactory;
 import com.jsharpe.plantlive.config.persistence.NopPersistenceFactory;
 import com.jsharpe.plantlive.config.persistence.PersistenceFactory;
+import com.jsharpe.plantlive.repositories.RepositoryWrapper;
+import com.jsharpe.plantlive.repositories.details.in.NopDetailInRepository;
+import com.jsharpe.plantlive.repositories.details.out.NopDetailOutRepository;
+import com.jsharpe.plantlive.repositories.plants.in.NopPlantInRepository;
+import com.jsharpe.plantlive.repositories.plants.out.NopPlantOutRepository;
 import io.dropwizard.setup.Environment;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +25,7 @@ public class ConfigurationTest {
     private final Environment environment = Mockito.mock(Environment.class);
 
     @Test
-    public void testInitialisation() throws Exception {
+    public void testNopInitialisation() throws Exception {
         // Given
         final PersistenceFactory persistenceFactory = new NopPersistenceFactory();
         final InFactory inFactory = new NopInFactory();
@@ -36,6 +41,37 @@ public class ConfigurationTest {
 
         // Then
         Assert.assertNull(plantliveConfiguration.getDatabase());
+    }
+
+    @Test
+    public void testMockedInitialisation() throws Exception {
+        // Given
+        final PersistenceFactory persistenceFactory = Mockito.mock(PersistenceFactory.class);
+        Mockito.when(persistenceFactory.getRepositories(Mockito.any())).thenReturn(
+                new RepositoryWrapper(
+                        new NopPlantInRepository(),
+                        new NopPlantOutRepository(),
+                        new NopDetailInRepository(),
+                        new NopDetailOutRepository()
+                )
+        );
+
+        final InFactory inFactory = Mockito.mock(InFactory.class);
+        final OutFactory outFactory = Mockito.mock(OutFactory.class);
+
+        final PlantliveConfiguration plantliveConfiguration = new PlantliveConfiguration(
+                persistenceFactory,
+                inFactory,
+                outFactory
+        );
+
+        // When
+        plantliveConfiguration.initialise(environment);
+
+        // Then
+        Mockito.verify(inFactory, Mockito.times(1)).initialise(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(outFactory, Mockito.times(1)).initialise(Mockito.any(), Mockito.any(), Mockito.any());
+
     }
 
 }
