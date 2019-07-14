@@ -48,7 +48,7 @@ public class OutResource {
 
         if (plantOptional.isPresent()) {
 
-            // TODO Use plant type to getByUserId some parameters
+            // TODO Use plant type to get some parameters
             final Plant plant = plantOptional.get();
             final Date since = this.dateSupplier.getDate();
             return this.detailOutRepository.getSummary(plant.getId(), since);
@@ -70,7 +70,7 @@ public class OutResource {
 
             if (plantOptional.isPresent()) {
 
-                // TODO Use plant type to getByUserId some parameters.
+                // TODO Use plant type to get some parameters.
                 final Plant plant = plantOptional.get();
                 final Date since = this.dateSupplier.getDate();
                 final Summary summary = this.detailOutRepository.getSummary(plant.getId(), since);
