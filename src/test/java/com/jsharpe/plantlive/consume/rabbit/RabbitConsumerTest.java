@@ -16,6 +16,7 @@ import org.junit.experimental.categories.Category;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 @Category(IntegrationTest.class)
@@ -121,12 +122,13 @@ public class RabbitConsumerTest {
         );
         rabbitConsumer.start();
 
+        final UUID userId = UUID.randomUUID();
         final Set<Plant> givenPlants = new HashSet<>();
-        givenPlants.add(new Plant(-1, PasswordHasher.hash("1234"), "cactus"));
+        givenPlants.add(new Plant(-1, userId, PasswordHasher.hash("1234"), "cactus"));
         this.mockRepository.populate(givenPlants, null);
 
         // When
-        this.localRabbitPublisher.publish("1;1234;2;3;4;5");
+        this.localRabbitPublisher.publish(userId.toString() + ";1234;2;3;4;5");
         Thread.sleep(500);
 
         // Then
@@ -156,15 +158,16 @@ public class RabbitConsumerTest {
         );
         rabbitConsumer.start();
 
+        final UUID userId = UUID.fromString("12344321-abcd-cdef-fedc-123412340000");
         final Set<Plant> givenPlants = new HashSet<>();
-        givenPlants.add(new Plant(-1, PasswordHasher.hash("1234"), "cactus"));
+        givenPlants.add(new Plant(-1, userId, PasswordHasher.hash("1234"), "cactus"));
         this.mockRepository.populate(givenPlants, null);
 
         // When
         // No such plant!
-        this.localRabbitPublisher.publish("2;1234;2;3;4;5");
+        this.localRabbitPublisher.publish("12344321-abcd-cdef-fedc-123412341111;1234;2;3;4;5");
         Thread.sleep(500);
-        this.localRabbitPublisher.publish("1;1234;2;3;4;5");
+        this.localRabbitPublisher.publish(userId.toString() + ";1234;2;3;4;5");
         Thread.sleep(500);
 
         // Then

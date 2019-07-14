@@ -45,4 +45,13 @@
         </createTable>
 
     </changeSet>
+
+    <changeSet id="2" author="jsharpe">
+        <addColumn tableName="plants">
+            <column name="user_id" type="uuid">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

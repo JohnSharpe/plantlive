@@ -20,6 +20,7 @@ import org.junit.experimental.categories.Category;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Category(IntegrationTest.class)
 public class SqlPlantOutRepositoryTest {
@@ -60,9 +61,10 @@ public class SqlPlantOutRepositoryTest {
     @Test
     public void testGetNonExistentPlant() {
         // Given
+        final UUID someUserId = UUID.fromString("12344321-abcd-cdef-fedc-123412340000");
 
         // When
-        final Optional<Plant> plantOptional = PLANT_OUT_REPOSITORY.get(1);
+        final Optional<Plant> plantOptional = PLANT_OUT_REPOSITORY.getByUserId(someUserId);
 
         // Then
         Assert.assertFalse(plantOptional.isPresent());
@@ -74,7 +76,7 @@ public class SqlPlantOutRepositoryTest {
         SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
 
         // When
-        final Optional<Plant> plantOptional = PLANT_OUT_REPOSITORY.get(1);
+        final Optional<Plant> plantOptional = PLANT_OUT_REPOSITORY.getByUserId(UUID.fromString("a483df51-e18e-4053-9875-6c753ca14997"));
 
         // Then
         Assert.assertTrue(plantOptional.isPresent());

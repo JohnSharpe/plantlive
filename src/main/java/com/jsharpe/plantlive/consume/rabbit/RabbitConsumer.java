@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class RabbitConsumer implements Managed {
 
@@ -66,10 +67,10 @@ public class RabbitConsumer implements Managed {
                     }
 
                     try {
-                        // TODO Lots of assumptions here, can we not get Rabbit to take care of this?
+                        // TODO Lots of assumptions here, can we not getByUserId Rabbit to take care of this?
                         // TODO Handle NumberFormatException more elegantly
                         this.inService.write(
-                                Long.valueOf(messageParts[0]),
+                                UUID.fromString(messageParts[0]),
                                 messageParts[1],
                                 delivery.getProperties().getTimestamp(),
                                 Double.valueOf(messageParts[2]),

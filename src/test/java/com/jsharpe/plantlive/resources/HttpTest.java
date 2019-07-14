@@ -6,7 +6,6 @@ import com.jsharpe.plantlive.PlantliveConfiguration;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.glassfish.jersey.client.JerseyClient;
 import org.junit.*;
 import org.junit.experimental.categories.Category;
 
@@ -52,11 +51,11 @@ public class HttpTest {
     @Test
     public void testNoPlantHttpRequest() {
         // Given
-        final String id = "1";
+        final String userId = "a483df51-e18e-4053-9875-6c753ca11111";
 
         // When
         final Response response = CLIENT.target("http://localhost:" + RULE.getLocalPort())
-                .queryParam("id", id)
+                .queryParam("id", userId)
                 .request(MediaType.TEXT_HTML)
                 .get();
 
@@ -71,11 +70,11 @@ public class HttpTest {
     @Test
     public void testNoPlantJsonRequest() {
         // Given
-        final String id = "1";
+        final String userId = "a483df51-e18e-4053-9875-6c753ca11111";
 
         // When
         final Response response = CLIENT.target("http://localhost:" + RULE.getLocalPort())
-                .queryParam("id", id)
+                .queryParam("id", userId)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
 

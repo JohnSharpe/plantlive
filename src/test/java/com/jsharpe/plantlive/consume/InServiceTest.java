@@ -15,6 +15,7 @@ import org.junit.experimental.categories.Category;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Category(UnitTest.class)
 public class InServiceTest {
@@ -29,7 +30,7 @@ public class InServiceTest {
 
         // When
         inService.write(
-                1,
+                UUID.randomUUID(),
                 "whatever",
                 new Date(),
                 10,
@@ -42,8 +43,9 @@ public class InServiceTest {
     @Test(expected = ConsumeException.class)
     public void testIncorrectPassword() throws ConsumeException {
         // Given
+        final UUID userId = UUID.randomUUID();
         final Set<Plant> givenPlants = new HashSet<>();
-        givenPlants.add(new Plant(-1, "super-secret", "cactus"));
+        givenPlants.add(new Plant(-1, userId, "super-secret", "cactus"));
         final MockRepository mockRepository = new MockRepository();
         mockRepository.populate(givenPlants, null);
 
@@ -54,7 +56,7 @@ public class InServiceTest {
 
         // When
         inService.write(
-                1,
+                userId,
                 "hacker",
                 new Date(),
                 10,
@@ -67,11 +69,12 @@ public class InServiceTest {
     @Test(expected = ConsumeException.class)
     public void testInvalidTemperature() throws ConsumeException, IllegalPasswordException {
         // Given
+        final UUID userId = UUID.randomUUID();
         final String password = "diet cola";
         final String hashed = PasswordHasher.hash(password);
 
         final Set<Plant> givenPlants = new HashSet<>();
-        givenPlants.add(new Plant(-1, hashed, "cactus"));
+        givenPlants.add(new Plant(-1, userId, hashed, "cactus"));
         final MockRepository mockRepository = new MockRepository();
         mockRepository.populate(givenPlants, null);
 
@@ -82,7 +85,7 @@ public class InServiceTest {
 
         // When
         inService.write(
-                1,
+                userId,
                 password,
                 new Date(),
                 -300.0,
@@ -95,12 +98,13 @@ public class InServiceTest {
     @Test
     public void testValidSave() throws IllegalPasswordException, ConsumeException {
         // Given
+        final UUID userId = UUID.randomUUID();
         final String password = "headphones";
         final String hashed = PasswordHasher.hash(password);
         final Date timestamp = new Date();
 
         final Set<Plant> givenPlants = new HashSet<>();
-        givenPlants.add(new Plant(-1, hashed, "tulip"));
+        givenPlants.add(new Plant(-1, userId, hashed, "tulip"));
         final MockRepository mockRepository = new MockRepository();
         mockRepository.populate(givenPlants, null);
 
@@ -110,7 +114,7 @@ public class InServiceTest {
         );
 
         // When
-        inService.write(1, password, timestamp, 23, 97, 44, 32);
+        inService.write(userId, password, timestamp, 23, 97, 44, 32);
 
         // Then
         final Set<Detail> savedDetails = mockRepository.getDetails();

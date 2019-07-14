@@ -5,11 +5,12 @@ import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface PlantOutRepository {
 
-    @SqlQuery("SELECT * FROM plants WHERE id = ?")
+    @SqlQuery("SELECT * FROM plants WHERE user_id = ?")
     @RegisterConstructorMapper(Plant.class)
-    Optional<Plant> get(long id);
+    Optional<Plant> getByUserId(UUID uuid);
 
 }
