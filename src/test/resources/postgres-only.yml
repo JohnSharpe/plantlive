@@ -6,6 +6,8 @@ server:
     - type: http
       port: 4000
 
+masterPassword: master123
+
 persistence:
   type: sql
   database:

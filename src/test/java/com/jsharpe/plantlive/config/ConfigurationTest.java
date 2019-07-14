@@ -31,6 +31,7 @@ public class ConfigurationTest {
         final InFactory inFactory = new NopInFactory();
         final OutFactory outFactory = new NopOutFactory();
         final PlantliveConfiguration plantliveConfiguration = new PlantliveConfiguration(
+                "whatever",
                 persistenceFactory,
                 inFactory,
                 outFactory
@@ -60,6 +61,7 @@ public class ConfigurationTest {
         final OutFactory outFactory = Mockito.mock(OutFactory.class);
 
         final PlantliveConfiguration plantliveConfiguration = new PlantliveConfiguration(
+                "whatever",
                 persistenceFactory,
                 inFactory,
                 outFactory
@@ -70,7 +72,9 @@ public class ConfigurationTest {
 
         // Then
         Mockito.verify(inFactory, Mockito.times(1)).initialise(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(outFactory, Mockito.times(1)).initialise(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(outFactory, Mockito.times(1)).initialise(
+                Mockito.any(), Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any()
+        );
 
     }
 

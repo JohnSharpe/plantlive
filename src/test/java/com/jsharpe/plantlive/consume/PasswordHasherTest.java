@@ -72,4 +72,16 @@ public class PasswordHasherTest {
         Assert.assertFalse(match);
     }
 
+    @Test
+    public void testVerifyBadPassword() {
+        // Given
+        final String password = "";
+
+        // When
+        final boolean match = PasswordHasher.verify(password, password);
+
+        // Then
+        Assert.assertFalse(match);
+    }
+
 }

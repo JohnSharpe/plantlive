@@ -4,7 +4,7 @@ import com.jsharpe.plantlive.exceptions.IllegalPasswordException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
-public class PasswordHasher {
+public abstract class PasswordHasher {
 
     public static String hash(String password) throws IllegalPasswordException {
         if (StringUtils.isBlank(password)) {

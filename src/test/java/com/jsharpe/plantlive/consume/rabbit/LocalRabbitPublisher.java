@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-public class LocalRabbitPublisher {
+class LocalRabbitPublisher {
 
     private final String queue;
     private Channel channel;
 
-    public LocalRabbitPublisher(
+    LocalRabbitPublisher(
             final String host,
             final Integer port,
             final String username,
@@ -41,7 +41,7 @@ public class LocalRabbitPublisher {
 
     }
 
-    public void publish(final String message) throws IOException {
+    void publish(final String message) throws IOException {
         this.channel.basicPublish(
                 "",
                 this.queue,

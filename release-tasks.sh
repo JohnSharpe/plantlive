@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 PORT=${PORT}
+MASTER_PASSWORD=${MASTER_PASSWORD}
 DATABASE_URL=${DATABASE_URL}
 
 # Fail if any of these environment variables are unset
 [[ -z "$PORT" ]] && echo 'PORT must be set.' && exit 1;
+[[ -z "$MASTER_PASSWORD" ]] && echo 'MASTER_PASSWORD must be set.' && exit 1;
 [[ -z "$DATABASE_URL" ]] && echo 'DATABASE_URL must be set.' && exit 1;
 
 echo "Writing configuration with port: $PORT and database url: $DATABASE_URL"
@@ -27,6 +29,8 @@ server:
   applicationConnectors:
     - type: http
       port: $PORT
+
+masterPassword: $MASTER_PASSWORD
 
 persistence:
   type: sql
