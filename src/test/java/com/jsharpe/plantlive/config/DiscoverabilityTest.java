@@ -6,6 +6,7 @@ import com.jsharpe.plantlive.config.in.NopInFactory;
 import com.jsharpe.plantlive.config.in.RabbitInFactory;
 import com.jsharpe.plantlive.config.out.HttpOutFactory;
 import com.jsharpe.plantlive.config.out.NopOutFactory;
+import com.jsharpe.plantlive.config.persistence.HerokuSqlPersistenceFactory;
 import com.jsharpe.plantlive.config.persistence.NopPersistenceFactory;
 import com.jsharpe.plantlive.config.persistence.SqlPersistenceFactory;
 import io.dropwizard.jackson.DiscoverableSubtypeResolver;
@@ -26,6 +27,7 @@ public class DiscoverabilityTest {
         // Then
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(NopPersistenceFactory.class));
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(SqlPersistenceFactory.class));
+        MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(HerokuSqlPersistenceFactory.class));
 
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(NopInFactory.class));
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(RabbitInFactory.class));
