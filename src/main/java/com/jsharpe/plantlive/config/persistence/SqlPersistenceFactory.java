@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.jsharpe.plantlive.repositories.RepositoryWrapper;
 import com.jsharpe.plantlive.repositories.details.in.DetailInRepository;
 import com.jsharpe.plantlive.repositories.details.out.DetailOutRepository;
-import com.jsharpe.plantlive.repositories.plants.in.NopPlantInRepository;
 import com.jsharpe.plantlive.repositories.plants.in.PlantInRepository;
 import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
 import io.dropwizard.db.DataSourceFactory;
@@ -40,15 +39,13 @@ public class SqlPersistenceFactory implements PersistenceFactory {
         final Jdbi jdbi = new JdbiFactory().build(environment, this.database, "sql");
 
         // Create
-        // TODO We don't require PlantIn behaviour yet
-        final PlantInRepository plantInRepository = new NopPlantInRepository();
-        // final PlantInRepository plantInRepository = jdbi.onDemand(PlantInRepository.class);
+        final PlantInRepository plantInRepository = jdbi.onDemand(PlantInRepository.class);
         final PlantOutRepository plantOutRepository = jdbi.onDemand(PlantOutRepository.class);
         final DetailInRepository detailInRepository = jdbi.onDemand(DetailInRepository.class);
         final DetailOutRepository detailOutRepository = jdbi.onDemand(DetailOutRepository.class);
 
         // Register
-        // environment.jersey().register(plantInRepository);
+        environment.jersey().register(plantInRepository);
         environment.jersey().register(plantOutRepository);
         environment.jersey().register(detailInRepository);
         environment.jersey().register(detailOutRepository);

@@ -20,6 +20,7 @@
         <mockito.version>1.10.19</mockito.version>
 
         <surefire.version>3.0.0-M3</surefire.version>
+        <pitest.version>1.4.9</pitest.version>
         <docker-maven-plugin.version>0.30.0</docker-maven-plugin.version>
         <exec.version>1.6.0</exec.version>
 
@@ -133,6 +134,21 @@
                         <configuration>
                             <groups>com.jsharpe.plantlive.LoadTest</groups>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${pitest.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

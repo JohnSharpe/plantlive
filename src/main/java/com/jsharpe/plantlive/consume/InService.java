@@ -4,10 +4,10 @@ import com.jsharpe.plantlive.exceptions.ConsumeException;
 import com.jsharpe.plantlive.models.Plant;
 import com.jsharpe.plantlive.repositories.details.in.DetailInRepository;
 import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
+import org.jdbi.v3.core.statement.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,7 +65,7 @@ public class InService {
         if (temperatureValid && humidityValid && lightValid && conductivityValid) {
             try {
                 this.detailInRepository.save(plant.getId(), inTimestamp, temperature, humidity, light, conductivity);
-            } catch (SQLException e) {
+            } catch (UnableToExecuteStatementException e) {
                 LOGGER.warn("SQL problem saving detail", e);
             }
         } else {

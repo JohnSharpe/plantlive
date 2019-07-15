@@ -17,6 +17,10 @@ public class PlantliveConfiguration extends Configuration {
 
     @Valid
     @NotNull
+    private final String masterPassword;
+
+    @Valid
+    @NotNull
     private final PersistenceFactory persistenceFactory;
 
     @Valid
@@ -29,10 +33,12 @@ public class PlantliveConfiguration extends Configuration {
 
     @JsonCreator
     public PlantliveConfiguration(
+            @JsonProperty("masterPassword") String masterPassword,
             @JsonProperty("persistence") PersistenceFactory persistenceFactory,
             @JsonProperty("in") InFactory inFactory,
             @JsonProperty("out") OutFactory outFactory
     ) {
+        this.masterPassword = masterPassword;
         this.persistenceFactory = persistenceFactory;
         this.inFactory = inFactory;
         this.outFactory = outFactory;
@@ -46,7 +52,13 @@ public class PlantliveConfiguration extends Configuration {
 
         final RepositoryWrapper repositories = this.persistenceFactory.getRepositories(environment);
         this.inFactory.initialise(environment, repositories.getPlantOutRepository(), repositories.getDetailInRepository());
-        this.outFactory.initialise(environment, repositories.getPlantOutRepository(), repositories.getDetailOutRepository());
+        this.outFactory.initialise(
+                environment,
+                masterPassword,
+                repositories.getPlantInRepository(),
+                repositories.getPlantOutRepository(),
+                repositories.getDetailOutRepository())
+        ;
 
     }
 

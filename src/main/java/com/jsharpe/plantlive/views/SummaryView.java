@@ -9,7 +9,6 @@ public class SummaryView extends View {
 
     public SummaryView(final Summary summary) {
         super("summary.ftl");
-        System.out.println(summary);
         this.summary = summary;
     }
 

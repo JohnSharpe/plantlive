@@ -50,4 +50,4 @@ in:
   type: nop
 
 out:
-  type: nop
+  type: http
