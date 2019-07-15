@@ -12,12 +12,17 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Environment;
 import org.jdbi.v3.core.Jdbi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 
 @JsonTypeName("heroku-sql")
 public class HerokuSqlPersistenceFactory implements PersistenceFactory {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HerokuSqlPersistenceFactory.class);
 
     private final DataSourceFactory database;
 
@@ -27,7 +32,14 @@ public class HerokuSqlPersistenceFactory implements PersistenceFactory {
             @JsonProperty("database") @Valid @NotNull DataSourceFactory database
     ) {
         // databaseUrl looks like postgres://user:pass@host.location.com:1234/databasename
-        final String[] userPass = databaseUrl.substring(11).split("@")[0].split(":");
+        LOGGER.info("Initialising with {}", databaseUrl);
+        final String[] userPass = databaseUrl
+                .substring(11) // Remove postgres://
+                .split("@")[0] // Take everything before the @
+                .split(":"); // Split on the colon
+
+        LOGGER.debug(Arrays.toString(userPass));
+
         database.setUser(userPass[0]);
         database.setPassword(userPass[1]);
         database.setUrl("jdbc:postgresql://" + databaseUrl.split("@")[1]);
