@@ -1,2 +1,3 @@
 com.jsharpe.plantlive.config.persistence.NopPersistenceFactory
 com.jsharpe.plantlive.config.persistence.SqlPersistenceFactory
+com.jsharpe.plantlive.config.persistence.HerokuSqlPersistenceFactory
