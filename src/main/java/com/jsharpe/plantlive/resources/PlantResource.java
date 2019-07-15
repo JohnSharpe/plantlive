@@ -50,7 +50,7 @@ public class PlantResource {
                 rowsAdded = this.plantInRepository.save(userId, hashedPassword, type);
             } catch (UnableToExecuteStatementException e) {
                 // The uuid may have clashed?
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to execute INSERT - try again?").build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to execute INSERT:\n" + e.getMessage()).build();
             }
 
             if (rowsAdded < 1) {

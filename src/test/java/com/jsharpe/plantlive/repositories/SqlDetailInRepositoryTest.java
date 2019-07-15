@@ -28,8 +28,6 @@ public class SqlDetailInRepositoryTest {
     public static final DropwizardAppRule<PlantliveConfiguration> RULE =
             new DropwizardAppRule<>(PlantliveApplication.class, ResourceHelpers.resourceFilePath("postgres-only.yml"));
 
-    private static final String FIXTURES_ROOT = "fixtures/sql/";
-
     private static Jdbi JDBI;
     private static DetailInRepository DETAIL_IN_REPOSITORY;
 
@@ -54,13 +52,13 @@ public class SqlDetailInRepositoryTest {
 
     @After
     public void teardown() {
-        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "truncate.sql");
+        SqlUtils.executeSeedSql(JDBI, SqlUtils.FIXTURES_ROOT + "truncate.sql");
     }
 
     @Test
-    public void writeDetail() throws SQLException {
+    public void writeDetail() {
         // Given
-        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
+        SqlUtils.executeSeedSql(JDBI, SqlUtils.FIXTURES_ROOT + "simple.sql");
 
         // When
         final int rows = DETAIL_IN_REPOSITORY.save(3, new Date(), 20, 89, 32, 12);
@@ -70,9 +68,9 @@ public class SqlDetailInRepositoryTest {
     }
 
     @Test(expected = UnableToExecuteStatementException.class)
-    public void writeDetailToNonExistentPlant() throws SQLException {
+    public void writeDetailToNonExistentPlant() {
         // Given
-        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
+        SqlUtils.executeSeedSql(JDBI, SqlUtils.FIXTURES_ROOT + "simple.sql");
 
         // When
         DETAIL_IN_REPOSITORY.save(4, new Date(), 20, 89, 32, 12);
