@@ -28,10 +28,11 @@ public class HerokuSqlPersistenceFactory implements PersistenceFactory {
 
     @JsonCreator
     public HerokuSqlPersistenceFactory(
-            @JsonProperty("databaseUrl") @Valid @NotNull String databaseUrl,
+            @JsonProperty("databaseUrlKey") @Valid @NotNull String databaseUrlKey,
             @JsonProperty("database") @Valid @NotNull DataSourceFactory database
     ) {
         // databaseUrl looks like postgres://user:pass@host.location.com:1234/databasename
+        final String databaseUrl = System.getenv(databaseUrlKey);
         LOGGER.info("Initialising with {}", databaseUrl);
         final String[] userPass = databaseUrl
                 .substring(11) // Remove postgres://

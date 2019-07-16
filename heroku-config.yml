@@ -2,11 +2,13 @@ server:
   applicationConnectors:
     - type: http
 
-masterPassword: $MASTER_PASSWORD
+masterPassword:
+  type: env
+  key: MASTER_PASSWORD
 
 persistence:
   type: heroku-sql
-  databaseUrl: $DATABASE_URL
+  databaseUrlKey: DATABASE_URL
   database:
     # the name of your JDBC driver
     driverClass: org.postgresql.Driver

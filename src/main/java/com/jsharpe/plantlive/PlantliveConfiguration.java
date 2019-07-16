@@ -3,6 +3,7 @@ package com.jsharpe.plantlive;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jsharpe.plantlive.config.in.InFactory;
+import com.jsharpe.plantlive.config.masterPassword.MasterPasswordCheck;
 import com.jsharpe.plantlive.config.out.OutFactory;
 import com.jsharpe.plantlive.config.persistence.PersistenceFactory;
 import com.jsharpe.plantlive.repositories.RepositoryWrapper;
@@ -17,7 +18,7 @@ public class PlantliveConfiguration extends Configuration {
 
     @Valid
     @NotNull
-    private final String masterPassword;
+    private final MasterPasswordCheck masterPasswordCheck;
 
     @Valid
     @NotNull
@@ -33,12 +34,12 @@ public class PlantliveConfiguration extends Configuration {
 
     @JsonCreator
     public PlantliveConfiguration(
-            @JsonProperty("masterPassword") String masterPassword,
+            @JsonProperty("masterPassword") MasterPasswordCheck masterPasswordCheck,
             @JsonProperty("persistence") PersistenceFactory persistenceFactory,
             @JsonProperty("in") InFactory inFactory,
             @JsonProperty("out") OutFactory outFactory
     ) {
-        this.masterPassword = masterPassword;
+        this.masterPasswordCheck = masterPasswordCheck;
         this.persistenceFactory = persistenceFactory;
         this.inFactory = inFactory;
         this.outFactory = outFactory;
@@ -54,11 +55,11 @@ public class PlantliveConfiguration extends Configuration {
         this.inFactory.initialise(environment, repositories.getPlantOutRepository(), repositories.getDetailInRepository());
         this.outFactory.initialise(
                 environment,
-                masterPassword,
+                this.masterPasswordCheck,
                 repositories.getPlantInRepository(),
                 repositories.getPlantOutRepository(),
-                repositories.getDetailOutRepository())
-        ;
+                repositories.getDetailOutRepository()
+        );
 
     }
 

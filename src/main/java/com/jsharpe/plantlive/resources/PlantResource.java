@@ -1,6 +1,7 @@
 package com.jsharpe.plantlive.resources;
 
 import com.jsharpe.plantlive.api.NewPlant;
+import com.jsharpe.plantlive.config.masterPassword.MasterPasswordCheck;
 import com.jsharpe.plantlive.consume.PasswordHasher;
 import com.jsharpe.plantlive.exceptions.IllegalPasswordException;
 import com.jsharpe.plantlive.repositories.plants.in.PlantInRepository;
@@ -16,14 +17,14 @@ import java.util.UUID;
 @Path("/plant")
 public class PlantResource {
 
-    private final String masterPassword;
+    private final MasterPasswordCheck masterPasswordCheck;
     private final PlantInRepository plantInRepository;
 
     public PlantResource(
-            final String masterPassword,
+            final MasterPasswordCheck masterPasswordCheck,
             final PlantInRepository plantInRepository
     ) {
-        this.masterPassword = masterPassword;
+        this.masterPasswordCheck = masterPasswordCheck;
         this.plantInRepository = plantInRepository;
     }
 
@@ -31,7 +32,7 @@ public class PlantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addPlant(final NewPlant newPlant) {
 
-        if (this.masterPassword.equals(newPlant.getMasterPassword())) {
+        if (this.masterPasswordCheck.matches(newPlant.getMasterPassword())) {
 
             final UUID userId = UUID.randomUUID();
 

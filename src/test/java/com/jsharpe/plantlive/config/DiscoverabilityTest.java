@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.jsharpe.plantlive.UnitTest;
 import com.jsharpe.plantlive.config.in.NopInFactory;
 import com.jsharpe.plantlive.config.in.RabbitInFactory;
+import com.jsharpe.plantlive.config.masterPassword.DirectMasterPasswordCheck;
+import com.jsharpe.plantlive.config.masterPassword.EnvMasterPasswordCheck;
+import com.jsharpe.plantlive.config.masterPassword.NopMasterPasswordCheck;
 import com.jsharpe.plantlive.config.out.HttpOutFactory;
 import com.jsharpe.plantlive.config.out.NopOutFactory;
 import com.jsharpe.plantlive.config.persistence.HerokuSqlPersistenceFactory;
@@ -25,6 +28,10 @@ public class DiscoverabilityTest {
                 .getDiscoveredSubtypes();
 
         // Then
+        MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(NopMasterPasswordCheck.class));
+        MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(DirectMasterPasswordCheck.class));
+        MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(EnvMasterPasswordCheck.class));
+
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(NopPersistenceFactory.class));
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(SqlPersistenceFactory.class));
         MatcherAssert.assertThat(discoverables, CoreMatchers.hasItem(HerokuSqlPersistenceFactory.class));

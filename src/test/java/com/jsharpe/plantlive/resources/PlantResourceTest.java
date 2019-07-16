@@ -2,6 +2,8 @@ package com.jsharpe.plantlive.resources;
 
 import com.jsharpe.plantlive.UnitTest;
 import com.jsharpe.plantlive.api.NewPlant;
+import com.jsharpe.plantlive.config.masterPassword.DirectMasterPasswordCheck;
+import com.jsharpe.plantlive.config.masterPassword.MasterPasswordCheck;
 import com.jsharpe.plantlive.consume.PasswordHasher;
 import com.jsharpe.plantlive.exceptions.IllegalPasswordException;
 import com.jsharpe.plantlive.models.Plant;
@@ -25,7 +27,7 @@ public class PlantResourceTest {
     public PlantResourceTest() {
         this.mockRepository = new MockRepository();
         this.plantResource = new PlantResource(
-                "master",
+                new DirectMasterPasswordCheck("master"),
                 this.mockRepository.getPlantInRepository()
         );
     }
@@ -94,6 +96,7 @@ public class PlantResourceTest {
     @Test
     public void testAddPlantToNaughtyDatabase() {
         // Given
+        final MasterPasswordCheck masterPasswordCheck = new DirectMasterPasswordCheck("master");
         final PlantInRepository plantInRepository = Mockito.mock(PlantInRepository.class);
         //noinspection unchecked
         Mockito.when(
@@ -104,7 +107,7 @@ public class PlantResourceTest {
                 )
         ).thenThrow(UnableToExecuteStatementException.class);
 
-        final PlantResource plantResource = new PlantResource("master", plantInRepository);
+        final PlantResource plantResource = new PlantResource(masterPasswordCheck, plantInRepository);
         final NewPlant newPlant = new NewPlant("master", "sad", "cactus");
 
         // When
@@ -118,6 +121,7 @@ public class PlantResourceTest {
     @Test
     public void testAddPlantToDudDatabase() {
         // Given
+        final MasterPasswordCheck masterPasswordCheck = new DirectMasterPasswordCheck("master");
         final PlantInRepository plantInRepository = Mockito.mock(PlantInRepository.class);
         Mockito.when(
                 plantInRepository.save(
@@ -127,7 +131,7 @@ public class PlantResourceTest {
                 )
         ).thenReturn(0);
 
-        final PlantResource plantResource = new PlantResource("master", plantInRepository);
+        final PlantResource plantResource = new PlantResource(masterPasswordCheck, plantInRepository);
         final NewPlant newPlant = new NewPlant("master", "sad", "cactus");
 
         // When
@@ -141,6 +145,7 @@ public class PlantResourceTest {
     @Test
     public void testAddPlantToInsaneDatabase() {
         // Given
+        final MasterPasswordCheck masterPasswordCheck = new DirectMasterPasswordCheck("master");
         final PlantInRepository plantInRepository = Mockito.mock(PlantInRepository.class);
         Mockito.when(
                 plantInRepository.save(
@@ -150,7 +155,7 @@ public class PlantResourceTest {
                 )
         ).thenReturn(2);
 
-        final PlantResource plantResource = new PlantResource("master", plantInRepository);
+        final PlantResource plantResource = new PlantResource(masterPasswordCheck, plantInRepository);
         final NewPlant newPlant = new NewPlant("master", "sad", "cactus");
 
         // When

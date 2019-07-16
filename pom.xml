@@ -113,6 +113,9 @@
                 <version>${surefire.version}</version>
                 <configuration>
                     <groups>com.jsharpe.plantlive.UnitTest</groups>
+                    <environmentVariables>
+                        <MASTER_PASSWORD>test_master_password</MASTER_PASSWORD>
+                    </environmentVariables>
                 </configuration>
                 <executions>
                     <execution>
@@ -142,6 +145,11 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>${pitest.version}</version>
+                <configuration>
+                    <environmentVariables>
+                        <MASTER_PASSWORD>test_master_password</MASTER_PASSWORD>
+                    </environmentVariables>
+                </configuration>
                 <executions>
                     <execution>
                         <id>test</id>
