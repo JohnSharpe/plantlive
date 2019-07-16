@@ -1,4 +1,8 @@
+dist: trusty
+
 language: java
+jdk:
+  - openjdk8
 
 services:
   - rabbitmq
