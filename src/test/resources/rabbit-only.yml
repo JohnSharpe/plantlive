@@ -6,10 +6,6 @@ server:
     - type: http
       port: 4000
 
-masterPassword:
-  type: direct
-  value: master123
-
 persistence:
   type: nop
 

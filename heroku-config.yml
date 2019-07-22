@@ -2,10 +2,6 @@ server:
   applicationConnectors:
     - type: http
 
-masterPassword:
-  type: env
-  key: MASTER_PASSWORD
-
 persistence:
   type: heroku-sql
   databaseUrlKey: DATABASE_URL

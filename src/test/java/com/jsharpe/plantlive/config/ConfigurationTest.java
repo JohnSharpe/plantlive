@@ -4,9 +4,6 @@ import com.jsharpe.plantlive.PlantliveConfiguration;
 import com.jsharpe.plantlive.UnitTest;
 import com.jsharpe.plantlive.config.in.InFactory;
 import com.jsharpe.plantlive.config.in.NopInFactory;
-import com.jsharpe.plantlive.config.masterPassword.DirectMasterPasswordCheck;
-import com.jsharpe.plantlive.config.masterPassword.MasterPasswordCheck;
-import com.jsharpe.plantlive.config.masterPassword.NopMasterPasswordCheck;
 import com.jsharpe.plantlive.config.out.NopOutFactory;
 import com.jsharpe.plantlive.config.out.OutFactory;
 import com.jsharpe.plantlive.config.persistence.NopPersistenceFactory;
@@ -30,12 +27,10 @@ public class ConfigurationTest {
     @Test
     public void testNopInitialisation() throws Exception {
         // Given
-        final MasterPasswordCheck masterPasswordCheck = new NopMasterPasswordCheck();
         final PersistenceFactory persistenceFactory = new NopPersistenceFactory();
         final InFactory inFactory = new NopInFactory();
         final OutFactory outFactory = new NopOutFactory();
         final PlantliveConfiguration plantliveConfiguration = new PlantliveConfiguration(
-                masterPasswordCheck,
                 persistenceFactory,
                 inFactory,
                 outFactory
@@ -51,7 +46,6 @@ public class ConfigurationTest {
     @Test
     public void testMockedInitialisation() throws Exception {
         // Given
-        final MasterPasswordCheck masterPasswordCheck = new DirectMasterPasswordCheck("master");
         final PersistenceFactory persistenceFactory = Mockito.mock(PersistenceFactory.class);
         Mockito.when(persistenceFactory.getRepositories(Mockito.any())).thenReturn(
                 new RepositoryWrapper(
@@ -66,7 +60,6 @@ public class ConfigurationTest {
         final OutFactory outFactory = Mockito.mock(OutFactory.class);
 
         final PlantliveConfiguration plantliveConfiguration = new PlantliveConfiguration(
-                masterPasswordCheck,
                 persistenceFactory,
                 inFactory,
                 outFactory
@@ -78,7 +71,7 @@ public class ConfigurationTest {
         // Then
         Mockito.verify(inFactory, Mockito.times(1)).initialise(Mockito.any(), Mockito.any(), Mockito.any());
         Mockito.verify(outFactory, Mockito.times(1)).initialise(
-                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()
+                Mockito.any(), Mockito.any(), Mockito.any()
         );
 
     }
