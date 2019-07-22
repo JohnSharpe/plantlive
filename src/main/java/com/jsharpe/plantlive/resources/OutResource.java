@@ -61,11 +61,19 @@ public class OutResource {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public View getSummaryHtml(@QueryParam("id") UUID userId) {
+    public View getSummaryHtml(@QueryParam("id") String userIdString) {
 
-        if (userId == null) {
+        if (userIdString == null) {
             return STANDARD_VIEW;
         } else {
+
+            final UUID userId;
+            try {
+                userId = UUID.fromString(userIdString);
+            } catch (IllegalArgumentException e) {
+                return STANDARD_VIEW_NO_PLANT;
+            }
+
             final Optional<Plant> plantOptional = this.plantOutRepository.getByUserId(userId);
 
             if (plantOptional.isPresent()) {

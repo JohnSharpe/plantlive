@@ -102,7 +102,7 @@ public class OutResourceTest {
         // Given
 
         // When
-        final View view = this.outResource.getSummaryHtml(UUID.randomUUID());
+        final View view = this.outResource.getSummaryHtml(UUID.randomUUID().toString());
 
         // Then
         Assert.assertNotNull(view);
@@ -123,7 +123,7 @@ public class OutResourceTest {
         this.mockRepository.populate(plants, details);
 
         // When
-        final View view = outResource.getSummaryHtml(userId);
+        final View view = outResource.getSummaryHtml(userId.toString());
 
         // Then
         Assert.assertNotNull(view);
