@@ -84,7 +84,28 @@ public class SqlPlantInRepositoryTest {
 
         PLANT_IN_REPOSITORY.save(userId, PasswordHasher.hash("else"), "tulip");
         // Then (exception)
+    }
 
+    @Test(expected = UnableToExecuteStatementException.class)
+    public void testTypeNotNullness() throws IllegalPasswordException {
+        // Given
+        final UUID userId = UUID.randomUUID();
+
+        // When
+        PLANT_IN_REPOSITORY.save(userId, PasswordHasher.hash("whatever"), null);
+
+        // Then (exception)
+    }
+
+    @Test(expected = UnableToExecuteStatementException.class)
+    public void testPasswordNotNullness() throws IllegalPasswordException {
+        // Given
+        final UUID userId = UUID.randomUUID();
+
+        // When
+        PLANT_IN_REPOSITORY.save(userId, null, "Rose");
+
+        // Then (exception)
     }
 
 }
