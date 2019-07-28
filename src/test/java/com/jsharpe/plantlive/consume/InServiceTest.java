@@ -7,6 +7,7 @@ import com.jsharpe.plantlive.models.Detail;
 import com.jsharpe.plantlive.models.Plant;
 import com.jsharpe.plantlive.repositories.MockRepository;
 import com.jsharpe.plantlive.repositories.details.in.NopDetailInRepository;
+import com.jsharpe.plantlive.repositories.plants.in.NopPlantInRepository;
 import com.jsharpe.plantlive.repositories.plants.out.NopPlantOutRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,12 +26,14 @@ public class InServiceTest {
         // Given
         final InService inService = new InService(
                 new NopPlantOutRepository(),
+                new NopPlantInRepository(),
                 new NopDetailInRepository()
         );
 
         // When
         inService.write(
                 UUID.randomUUID(),
+                "whatever",
                 "whatever",
                 new Date(),
                 10,
@@ -51,12 +54,14 @@ public class InServiceTest {
 
         final InService inService = new InService(
                 mockRepository.getPlantOutRepository(),
+                mockRepository.getPlantInRepository(),
                 mockRepository.getDetailInRepository()
         );
 
         // When
         inService.write(
                 userId,
+                "cactus",
                 "hacker",
                 new Date(),
                 10,
@@ -80,6 +85,7 @@ public class InServiceTest {
 
         final InService inService = new InService(
                 mockRepository.getPlantOutRepository(),
+                mockRepository.getPlantInRepository(),
                 mockRepository.getDetailInRepository()
         );
 
@@ -87,6 +93,7 @@ public class InServiceTest {
         inService.write(
                 userId,
                 password,
+                "cactus",
                 new Date(),
                 -300.0,
                 20.0,
@@ -99,30 +106,132 @@ public class InServiceTest {
     public void testValidSave() throws IllegalPasswordException, ConsumeException {
         // Given
         final UUID userId = UUID.randomUUID();
+        final String type = "tulip";
         final String password = "headphones";
         final String hashed = PasswordHasher.hash(password);
         final Date timestamp = new Date();
 
         final Set<Plant> givenPlants = new HashSet<>();
-        givenPlants.add(new Plant(-1, userId, hashed, "tulip"));
+        givenPlants.add(new Plant(-1, userId, hashed, type));
         final MockRepository mockRepository = new MockRepository();
         mockRepository.populate(givenPlants, null);
 
         final InService inService = new InService(
                 mockRepository.getPlantOutRepository(),
+                mockRepository.getPlantInRepository(),
                 mockRepository.getDetailInRepository()
         );
 
         // When
-        inService.write(userId, password, timestamp, 23, 97, 44, 32);
+        inService.write(userId, type, password, timestamp, 23, 97, 44, 32);
 
         // Then
+        final Set<Plant> savedPlants = mockRepository.getPlants();
+        Assert.assertEquals(1, savedPlants.size());
+
+        final Plant plant = savedPlants.stream().findFirst().orElseThrow(RuntimeException::new);
+        Assert.assertEquals(type, plant.getType());
+
         final Set<Detail> savedDetails = mockRepository.getDetails();
         Assert.assertEquals(1, savedDetails.size());
 
         final Detail detail = savedDetails.stream().findFirst().orElseThrow(RuntimeException::new);
+
+        // It's not our business which id is assigned.
+        // But we'll throw this line in for coverage.
         Assert.assertEquals(1, detail.getId());
-        Assert.assertEquals(1, detail.getPlantId());
+
+        // It's not our business which id is assigned.
+        // BUT it is our business that it references the plant
+        Assert.assertEquals(plant.getId(), detail.getPlantId());
+
+        Assert.assertEquals(timestamp, detail.getInTimestamp());
+        Assert.assertEquals(23, detail.getTemperature(), 0.0000001);
+        Assert.assertEquals(97, detail.getHumidity(), 0.0000001);
+        Assert.assertEquals(44, detail.getLight(), 0.0000001);
+        Assert.assertEquals(32, detail.getConductivity(), 0.0000001);
+    }
+
+    @Test
+    public void testChangeType() throws ConsumeException, IllegalPasswordException {
+        // Given
+        final UUID userId = UUID.randomUUID();
+        final String type = "tulip";
+        final String newType = "chrysanthemum";
+        final String password = "headphones";
+        final String hashed = PasswordHasher.hash(password);
+        final Date timestamp = new Date();
+
+        final Set<Plant> givenPlants = new HashSet<>();
+        givenPlants.add(new Plant(-1, userId, hashed, type));
+        final MockRepository mockRepository = new MockRepository();
+        mockRepository.populate(givenPlants, null);
+
+        final InService inService = new InService(
+                mockRepository.getPlantOutRepository(),
+                mockRepository.getPlantInRepository(),
+                mockRepository.getDetailInRepository()
+        );
+
+        // When
+        inService.write(userId, newType, password, timestamp, 23, 97, 44, 32);
+
+        // Then
+        final Set<Plant> savedPlants = mockRepository.getPlants();
+        Assert.assertEquals(1, savedPlants.size());
+
+        final Plant plant = savedPlants.stream().findFirst().orElseThrow(RuntimeException::new);
+        Assert.assertEquals(newType, plant.getType());
+
+        final Set<Detail> savedDetails = mockRepository.getDetails();
+        Assert.assertEquals(1, savedDetails.size());
+
+        final Detail detail = savedDetails.stream().findFirst().orElseThrow(RuntimeException::new);
+        Assert.assertEquals(plant.getId(), detail.getPlantId());
+        Assert.assertEquals(timestamp, detail.getInTimestamp());
+        Assert.assertEquals(23, detail.getTemperature(), 0.0000001);
+        Assert.assertEquals(97, detail.getHumidity(), 0.0000001);
+        Assert.assertEquals(44, detail.getLight(), 0.0000001);
+        Assert.assertEquals(32, detail.getConductivity(), 0.0000001);
+    }
+
+    // Assert the update goes through fine
+    @Test
+    public void testChangeTypeInvalid() throws ConsumeException, IllegalPasswordException {
+        // Given
+        final UUID userId = UUID.randomUUID();
+        final String type = "tulip";
+        final String password = "headphones";
+        final String hashed = PasswordHasher.hash(password);
+        final Date timestamp = new Date();
+
+        final Set<Plant> givenPlants = new HashSet<>();
+        givenPlants.add(new Plant(-1, userId, hashed, type));
+        final MockRepository mockRepository = new MockRepository();
+        mockRepository.populate(givenPlants, null);
+
+        final InService inService = new InService(
+                mockRepository.getPlantOutRepository(),
+                mockRepository.getPlantInRepository(),
+                mockRepository.getDetailInRepository()
+        );
+
+        // When
+        inService.write(userId, "", password, timestamp, 23, 97, 44, 32);
+
+        // Then
+        final Set<Plant> savedPlants = mockRepository.getPlants();
+        Assert.assertEquals(1, savedPlants.size());
+
+        final Plant plant = savedPlants.stream().findFirst().orElseThrow(RuntimeException::new);
+        // Not changed!
+        Assert.assertEquals(type, plant.getType());
+
+        final Set<Detail> savedDetails = mockRepository.getDetails();
+        Assert.assertEquals(1, savedDetails.size());
+
+        final Detail detail = savedDetails.stream().findFirst().orElseThrow(RuntimeException::new);
+        Assert.assertEquals(plant.getId(), detail.getPlantId());
         Assert.assertEquals(timestamp, detail.getInTimestamp());
         Assert.assertEquals(23, detail.getTemperature(), 0.0000001);
         Assert.assertEquals(97, detail.getHumidity(), 0.0000001);

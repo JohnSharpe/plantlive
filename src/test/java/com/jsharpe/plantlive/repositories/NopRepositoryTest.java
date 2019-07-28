@@ -19,12 +19,24 @@ import java.util.UUID;
 public class NopRepositoryTest {
 
     @Test
-    public void testNopPlantInRepository() {
+    public void testNopPlantInRepositorySave() {
         // Given
         final NopPlantInRepository plantInRepository = new NopPlantInRepository();
 
         // When
         final int rows = plantInRepository.save(null, null, null);
+
+        // Then
+        Assert.assertEquals(0, rows);
+    }
+
+    @Test
+    public void testNopPlantInRepositoryUpdateType() {
+        // Given
+        final NopPlantInRepository plantInRepository = new NopPlantInRepository();
+
+        // When
+        final int rows = plantInRepository.updateType(null,0);
 
         // Then
         Assert.assertEquals(0, rows);

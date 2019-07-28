@@ -20,13 +20,13 @@ import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 @Category(IntegrationTest.class)
-public class RabbitConsumerTest {
+public class RabbitConnectionTest {
 
     private final MockRepository mockRepository;
     private final LocalRabbitPublisher localRabbitPublisher;
     private final InService inService;
 
-    public RabbitConsumerTest() throws IOException, TimeoutException {
+    public RabbitConnectionTest() throws IOException, TimeoutException {
         this.mockRepository = new MockRepository();
 
         this.localRabbitPublisher = new LocalRabbitPublisher(
@@ -40,6 +40,7 @@ public class RabbitConsumerTest {
 
         this.inService = new InService(
                 this.mockRepository.getPlantOutRepository(),
+                this.mockRepository.getPlantInRepository(),
                 this.mockRepository.getDetailInRepository()
         );
     }
@@ -128,7 +129,7 @@ public class RabbitConsumerTest {
         this.mockRepository.populate(givenPlants, null);
 
         // When
-        this.localRabbitPublisher.publish(userId.toString() + ";1234;2;3;4;5");
+        this.localRabbitPublisher.publish(userId.toString() + ";rose;1234;2;3;4;5");
         Thread.sleep(500);
 
         // Then
@@ -167,7 +168,7 @@ public class RabbitConsumerTest {
         // No such plant!
         this.localRabbitPublisher.publish("12344321-abcd-cdef-fedc-123412341111;1234;2;3;4;5");
         Thread.sleep(500);
-        this.localRabbitPublisher.publish(userId.toString() + ";1234;2;3;4;5");
+        this.localRabbitPublisher.publish(userId.toString() + ";tulip;1234;2;3;4;5");
         Thread.sleep(500);
 
         // Then
