@@ -7,6 +7,7 @@ import com.jsharpe.plantlive.consume.InService;
 import com.jsharpe.plantlive.consume.rabbit.RabbitConsumer;
 import com.jsharpe.plantlive.health.RabbitHealthCheck;
 import com.jsharpe.plantlive.repositories.details.in.DetailInRepository;
+import com.jsharpe.plantlive.repositories.plants.in.PlantInRepository;
 import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
 import com.rabbitmq.client.ConnectionFactory;
 import io.dropwizard.setup.Environment;
@@ -64,11 +65,13 @@ public class RabbitInFactory implements InFactory {
     public void initialise(
             final Environment environment,
             final PlantOutRepository plantOutRepository,
+            final PlantInRepository plantInRepository,
             final DetailInRepository detailInRepository
     ) {
 
         final InService inService = new InService(
                 plantOutRepository,
+                plantInRepository,
                 detailInRepository
         );
 

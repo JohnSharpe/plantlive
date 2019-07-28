@@ -45,7 +45,12 @@ public class PlantliveConfiguration extends Configuration {
     public void initialise(final Environment environment) throws Exception {
 
         final RepositoryWrapper repositories = this.persistenceFactory.getRepositories(environment);
-        this.inFactory.initialise(environment, repositories.getPlantOutRepository(), repositories.getDetailInRepository());
+        this.inFactory.initialise(
+                environment,
+                repositories.getPlantOutRepository(),
+                repositories.getPlantInRepository(),
+                repositories.getDetailInRepository()
+        );
         this.outFactory.initialise(
                 environment,
                 repositories.getPlantOutRepository(),

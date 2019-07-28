@@ -69,10 +69,10 @@ public class ConfigurationTest {
         plantliveConfiguration.initialise(environment);
 
         // Then
-        Mockito.verify(inFactory, Mockito.times(1)).initialise(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(outFactory, Mockito.times(1)).initialise(
-                Mockito.any(), Mockito.any(), Mockito.any()
-        );
+        Mockito.verify(inFactory, Mockito.times(1))
+                .initialise(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(outFactory, Mockito.times(1))
+                .initialise(Mockito.any(), Mockito.any(), Mockito.any());
 
     }
 

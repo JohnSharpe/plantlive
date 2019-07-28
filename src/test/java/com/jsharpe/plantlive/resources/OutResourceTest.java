@@ -112,6 +112,20 @@ public class OutResourceTest {
     }
 
     @Test
+    public void testGetHtmlSummaryForNoUUID() {
+        // Given
+
+        // When
+        final View view = this.outResource.getSummaryHtml("some nonsense");
+
+        // Then
+        Assert.assertNotNull(view);
+        Assert.assertTrue(view instanceof StandardView);
+        final StandardView standardView = (StandardView) view;
+        Assert.assertTrue(standardView.isPlantNotFound());
+    }
+
+    @Test
     public void testGetHtmlSummaryForAPlant() throws IllegalPasswordException {
         // Given
         final UUID userId = UUID.randomUUID();

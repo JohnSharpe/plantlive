@@ -19,14 +19,14 @@ public class MockRepository {
     private final AtomicLong LAST_DETAIL_ID = new AtomicLong(0);
     private final Set<Detail> DETAILS = new HashSet<>();
 
-     private final PlantInRepository plantInRepository;
+    private final PlantInRepository plantInRepository;
     private final PlantOutRepository plantOutRepository;
     private final DetailInRepository detailInRepository;
     private final DetailOutRepository detailOutRepository;
 
     public MockRepository() {
         this.clear();
-         this.plantInRepository = new PlantIn(LAST_PLANT_ID, PLANTS);
+        this.plantInRepository = new PlantIn(LAST_PLANT_ID, PLANTS);
         this.plantOutRepository = new PlantOut(PLANTS);
         this.detailInRepository = new DetailIn(LAST_DETAIL_ID, DETAILS);
         this.detailOutRepository = new DetailOut(PLANTS, DETAILS);
@@ -70,9 +70,9 @@ public class MockRepository {
         return DETAILS;
     }
 
-     public PlantInRepository getPlantInRepository() {
-         return plantInRepository;
-     }
+    public PlantInRepository getPlantInRepository() {
+        return plantInRepository;
+    }
 
     public PlantOutRepository getPlantOutRepository() {
         return plantOutRepository;
@@ -94,6 +94,37 @@ public class MockRepository {
         PlantIn(AtomicLong lastPlantId, Set<Plant> plants) {
             this.lastPlantId = lastPlantId;
             this.plants = plants;
+        }
+
+        @Override
+        public int updateType(String type, long id) {
+
+            Plant foundPlant = null;
+            final Iterator<Plant> it = this.plants.iterator();
+            while (it.hasNext()) {
+
+                final Plant thisPlant = it.next();
+                if (thisPlant.getId() == id) {
+                    foundPlant = thisPlant;
+                    it.remove();
+                    break;
+                }
+
+            }
+
+            if (foundPlant != null) {
+                this.plants.add(
+                        new Plant(
+                                foundPlant.getId(),
+                                foundPlant.getUserId(),
+                                foundPlant.getPassword(),
+                                type
+                        )
+                );
+                return 1;
+            }
+
+            return 0;
         }
 
         @Override

@@ -3,7 +3,9 @@ package com.jsharpe.plantlive.consume;
 import com.jsharpe.plantlive.exceptions.ConsumeException;
 import com.jsharpe.plantlive.models.Plant;
 import com.jsharpe.plantlive.repositories.details.in.DetailInRepository;
+import com.jsharpe.plantlive.repositories.plants.in.PlantInRepository;
 import com.jsharpe.plantlive.repositories.plants.out.PlantOutRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.jdbi.v3.core.statement.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +23,22 @@ public class InService {
     private static final Logger LOGGER = LoggerFactory.getLogger(InService.class);
 
     private final PlantOutRepository plantOutRepository;
+    private final PlantInRepository plantInRepository;
     private final DetailInRepository detailInRepository;
 
-    public InService(final PlantOutRepository plantOutRepository, final DetailInRepository detailInRepository) {
+    public InService(
+            final PlantOutRepository plantOutRepository,
+            final PlantInRepository plantInRepository,
+            final DetailInRepository detailInRepository
+    ) {
         this.plantOutRepository = plantOutRepository;
+        this.plantInRepository = plantInRepository;
         this.detailInRepository = detailInRepository;
     }
 
     public void write(
             final UUID userId,
+            final String type,
             final String password,
             final Date inTimestamp,
             final double temperature,
@@ -52,6 +61,13 @@ public class InService {
             final String problem = String.format("Password [%s] is incorrect for plant with user id [%s]", password, userId);
             LOGGER.warn(problem);
             throw new ConsumeException(problem);
+        }
+
+        // If type is different, get it in
+        // TODO Validate type when there's something to validate against.
+        // TODO Possible an enum of acceptable plants
+        if (StringUtils.isNotBlank(type) && !type.equalsIgnoreCase(plant.getType())) {
+            this.plantInRepository.updateType(type, plant.getId());
         }
 
         // We're going to trust the date
