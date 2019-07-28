@@ -29,7 +29,26 @@ From there, the output can migrate with Liquibase to get your tables into shape:
 This will generate a normal Java jar.  
 `java -jar target/xyz.jar server your-config.yml`
 
-## Api
+## In
+Regardless of messaging implementation, a String of semi-colon-separated data, in order, must reach the application.
+
+- userId : UUID,
+- type : String,
+- password : String,
+- temperature : double,
+- humidity : double,
+- light : double,
+- conductivity : double
+
+```
+e.g.
+12341234-abcd-cdef-1234-abcdeffedcba;rose;pA55W0rD;23;89;45;21
+```
+
+### Rabbit
+With the rabbit implementation, this message must take the form of the above String represented with UTF-8 bytes.
+
+## HTTP Api
 The application has the following resources:  
 When `Accept=text/html` 
 - GET "/" - Gives you a simple welcome page including a form to get you to the next endpoint.
