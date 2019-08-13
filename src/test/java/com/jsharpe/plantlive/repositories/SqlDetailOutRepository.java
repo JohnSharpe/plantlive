@@ -53,6 +53,11 @@ public class SqlDetailOutRepository {
         DETAIL_OUT_REPOSITORY = JDBI.onDemand(DetailOutRepository.class);
     }
 
+    @Before
+    public void setup() {
+        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
+    }
+
     @After
     public void teardown() {
         SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "truncate.sql");
@@ -61,7 +66,6 @@ public class SqlDetailOutRepository {
     @Test
     public void testGetSummaryWithAllValues() {
         // Given
-        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
         final long id = 2;
         final Date since;
         {
@@ -70,12 +74,22 @@ public class SqlDetailOutRepository {
             since = sinceCal.getTime();
         }
 
+        final long latest;
+        {
+            // 2018-11-21 18:00:00
+            final Calendar latestCal = Calendar.getInstance();
+            latestCal.set(2018, Calendar.NOVEMBER, 21, 18, 0, 0);
+            latest = latestCal.getTimeInMillis();
+        }
+
         // When
         final Summary summary = DETAIL_OUT_REPOSITORY.getSummary(id, since);
 
         // Then
         Assert.assertNotNull(summary);
 
+
+        Assert.assertEquals(latest, summary.getLatest());
         Assert.assertEquals(22.0, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(83.2, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(43.8, summary.getLight(), 0.0000000001);
@@ -85,13 +99,19 @@ public class SqlDetailOutRepository {
     @Test
     public void testGetSummaryWithSomeValues() {
         // Given
-        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
         final long id = 2;
         final Date since;
         {
             final Calendar sinceCal = Calendar.getInstance();
             sinceCal.set(2018, Calendar.NOVEMBER, 21, 13, 30, 0);
             since = sinceCal.getTime();
+        }
+        final long latest;
+        {
+            // 2018-11-21 18:00:00
+            final Calendar latestCal = Calendar.getInstance();
+            latestCal.set(2018, Calendar.NOVEMBER, 21, 18, 0, 0);
+            latest = latestCal.getTimeInMillis();
         }
 
         // When
@@ -100,6 +120,7 @@ public class SqlDetailOutRepository {
         // Then
         Assert.assertNotNull(summary);
 
+        Assert.assertEquals(latest, summary.getLatest());
         Assert.assertEquals(23.4, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(81.4, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(43.8, summary.getLight(), 0.0000000001);
@@ -109,7 +130,6 @@ public class SqlDetailOutRepository {
     @Test
     public void testGetSummaryWithoutValues() {
         // Given
-        SqlUtils.executeSeedSql(JDBI, FIXTURES_ROOT + "simple.sql");
         final long id = 3;
         final Date since;
         {
@@ -124,6 +144,7 @@ public class SqlDetailOutRepository {
         // Then
         Assert.assertNotNull(summary);
 
+        Assert.assertEquals(0, summary.getLatest());
         Assert.assertEquals(0, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(0, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(0, summary.getLight(), 0.0000000001);

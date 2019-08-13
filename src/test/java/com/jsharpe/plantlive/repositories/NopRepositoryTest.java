@@ -76,6 +76,7 @@ public class NopRepositoryTest {
 
         // Then
         Assert.assertNotNull(summary);
+        Assert.assertEquals(0, summary.getLatest());
         Assert.assertEquals(0, summary.getTemperature(), 0.000001);
         Assert.assertEquals(0, summary.getHumidity(), 0.000001);
         Assert.assertEquals(0, summary.getLight(), 0.000001);

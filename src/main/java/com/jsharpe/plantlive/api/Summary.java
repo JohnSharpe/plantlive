@@ -12,11 +12,11 @@ import java.beans.ConstructorProperties;
  */
 public class Summary {
 
-    // TODO this might eventually be a uuid (i.e. obscuring database state)
-//    private final long id;
-
     // TODO this might eventually be an enum
-//    private final String type;
+    // private final String type;
+
+    // When we last heard from the device
+    private final long latest;
 
     private final double temperature;
     private final double humidity;
@@ -37,33 +37,34 @@ public class Summary {
      * @param light        the average light level the plant is exposed to
      * @param conductivity the average conductivity (wetness) of the soil
      */
-    @ConstructorProperties({"avg_temperature", "avg_humidity", "avg_light", "avg_conductivity"})
+    @ConstructorProperties({"max_in_timestamp", "avg_temperature", "avg_humidity", "avg_light", "avg_conductivity"})
     @JsonCreator
     public Summary(
-//            @JsonProperty("id") long id,
 //            @JsonProperty("type") String type,
+            @JsonProperty("latest") long latest,
             @JsonProperty("temperature") double temperature,
             @JsonProperty("humidity") double humidity,
             @JsonProperty("light") double light,
             @JsonProperty("conductivity") double conductivity
+
     ) {
-//        this.id = id;
 //        this.type = type;
+        this.latest = latest;
         this.temperature = temperature;
         this.humidity = humidity;
         this.light = light;
         this.conductivity = conductivity;
     }
 
-//    @JsonProperty("id")
-//    public long getId() {
-//        return id;
-//    }
-
 //    @JsonProperty("type")
 //    public String getType() {
 //        return type;
 //    }
+
+    @JsonProperty("latest")
+    public long getLatest() {
+        return latest;
+    }
 
     @JsonProperty("temperature")
     public double getTemperature() {

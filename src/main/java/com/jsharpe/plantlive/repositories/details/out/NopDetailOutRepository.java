@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class NopDetailOutRepository implements DetailOutRepository {
 
-    private static final Summary EMPTY_SUMMARY = new Summary(0, 0, 0, 0);
+    private static final Summary EMPTY_SUMMARY = new Summary(0, 0, 0, 0, 0);
 
     @Override
     public Summary getSummary(long id, Date since) {

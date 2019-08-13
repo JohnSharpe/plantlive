@@ -184,6 +184,8 @@ public class MockRepository {
 
         @Override
         public Summary getSummary(long id, Date since) {
+            long latestTime = 0;
+
             int tempTotal = 0;
             int tempCount = 0;
 
@@ -205,11 +207,17 @@ public class MockRepository {
             }
 
             if (plant == null) {
-                return new Summary(0, 0, 0, 0);
+                return new Summary(0, 0, 0, 0, 0);
             }
 
             for (Detail detail : this.details) {
                 if (detail.getPlantId() == id && detail.getInTimestamp().after(since)) {
+
+                    // Pretty rough way of doing it, but it works for tests
+                    if (detail.getInTimestamp().after(new Date(latestTime))) {
+                        latestTime = detail.getInTimestamp().getTime();
+                    }
+
                     tempTotal += detail.getTemperature();
                     tempCount++;
 
@@ -225,6 +233,7 @@ public class MockRepository {
             }
 
             return new Summary(
+                    latestTime,
                     tempTotal / tempCount,
                     humiTotal / humiCount,
                     lightTotal / lightCount,

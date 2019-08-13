@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
+import java.util.Date;
 
 @Category(UnitTest.class)
 public class SummarySerializationTest {
@@ -18,7 +19,7 @@ public class SummarySerializationTest {
     @Test
     public void testMinimal() throws IOException {
         // Given
-        final Summary minimal = new Summary(0, 0, 0, 0);
+        final Summary minimal = new Summary(0, 0, 0, 0, 0);
         final String expected = MAPPER.writeValueAsString(minimal);
 
         // When
@@ -33,7 +34,7 @@ public class SummarySerializationTest {
     @Test
     public void testNormal() throws IOException {
         // Given
-        final Summary normal = new Summary(24, 73, 60, 4);
+        final Summary normal = new Summary(1565630997187L, 24, 73, 60, 4);
         final String expected = MAPPER.writeValueAsString(normal);
 
         // When

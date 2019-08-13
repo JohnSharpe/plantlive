@@ -9,7 +9,7 @@ import java.util.Date;
 
 public interface DetailOutRepository {
 
-    @SqlQuery("SELECT AVG(d.temperature) avg_temperature, AVG(d.humidity) avg_humidity, AVG(d.light) avg_light, AVG(d.conductivity) avg_conductivity " +
+    @SqlQuery("SELECT MAX(d.in_timestamp) max_in_timestamp, AVG(d.temperature) avg_temperature, AVG(d.humidity) avg_humidity, AVG(d.light) avg_light, AVG(d.conductivity) avg_conductivity " +
             "FROM plants p INNER JOIN details d ON p.id = d.plant_id " +
             "WHERE p.id = :id AND d.in_timestamp >= :since")
     @RegisterConstructorMapper(Summary.class)
