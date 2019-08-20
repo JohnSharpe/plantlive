@@ -19,7 +19,7 @@ public class SummarySerializationTest {
     @Test
     public void testMinimal() throws IOException {
         // Given
-        final Summary minimal = new Summary(0, 0, 0, 0, 0);
+        final Summary minimal = new Summary(null, 0, 0, 0, 0);
         final String expected = MAPPER.writeValueAsString(minimal);
 
         // When

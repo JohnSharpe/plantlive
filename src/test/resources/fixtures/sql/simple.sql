@@ -1,8 +1,9 @@
 INSERT INTO plants (id, user_id, password, type) VALUES (1, 'a483df51-e18e-4053-9875-6c753ca14997', 'a', 'cactus');
 INSERT INTO plants (id, user_id, password, type) VALUES (2, '8159e4e2-700b-406c-865c-65f08d341572', 'b', 'rose');
 INSERT INTO plants (id, user_id, password, type) VALUES (3, '03adf61a-fada-45e8-a88e-af0c2f97b9d3', 'c', 'dandelion');
+INSERT INTO plants (id, user_id, password, type) VALUES (4, '4f1f1997-4922-4828-9858-2b15f291b6c6', 'd', 'lily');
 
-ALTER SEQUENCE plants_id_seq RESTART WITH 4;
+ALTER SEQUENCE plants_id_seq RESTART WITH 5;
 
 -- Reports once a day
 INSERT INTO details (id, plant_id, in_timestamp, temperature, humidity, light, conductivity)

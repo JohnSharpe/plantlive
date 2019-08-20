@@ -88,8 +88,8 @@ public class SqlDetailOutRepository {
         // Then
         Assert.assertNotNull(summary);
 
-
-        Assert.assertEquals(latest, summary.getLatest());
+        Assert.assertNotNull(summary.getLatest());
+        Assert.assertEquals(latest, summary.getLatest().longValue());
         Assert.assertEquals(22.0, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(83.2, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(43.8, summary.getLight(), 0.0000000001);
@@ -120,7 +120,8 @@ public class SqlDetailOutRepository {
         // Then
         Assert.assertNotNull(summary);
 
-        Assert.assertEquals(latest, summary.getLatest());
+        Assert.assertNotNull(summary.getLatest());
+        Assert.assertEquals(latest, summary.getLatest().longValue());
         Assert.assertEquals(23.4, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(81.4, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(43.8, summary.getLight(), 0.0000000001);
@@ -128,7 +129,7 @@ public class SqlDetailOutRepository {
     }
 
     @Test
-    public void testGetSummaryWithoutValues() {
+    public void testGetSummaryWithoutValuesAvailable() {
         // Given
         final long id = 3;
         final Date since;
@@ -144,7 +145,31 @@ public class SqlDetailOutRepository {
         // Then
         Assert.assertNotNull(summary);
 
-        Assert.assertEquals(0, summary.getLatest());
+        Assert.assertNull(summary.getLatest());
+        Assert.assertEquals(0, summary.getTemperature(), 0.0000000001);
+        Assert.assertEquals(0, summary.getHumidity(), 0.0000000001);
+        Assert.assertEquals(0, summary.getLight(), 0.0000000001);
+        Assert.assertEquals(0, summary.getConductivity(), 0.0000000001);
+    }
+
+    // Same as above
+    @Test
+    public void testGetSummaryWithoutValuesExisting() {
+        final long id = 4;
+        final Date since;
+        {
+            final Calendar sinceCal = Calendar.getInstance();
+            sinceCal.set(2018, Calendar.JANUARY, 0, 0, 0, 0);
+            since = sinceCal.getTime();
+        }
+
+        // When
+        final Summary summary = DETAIL_OUT_REPOSITORY.getSummary(id, since);
+
+        // Then
+        Assert.assertNotNull(summary);
+
+        Assert.assertNull(summary.getLatest());
         Assert.assertEquals(0, summary.getTemperature(), 0.0000000001);
         Assert.assertEquals(0, summary.getHumidity(), 0.0000000001);
         Assert.assertEquals(0, summary.getLight(), 0.0000000001);

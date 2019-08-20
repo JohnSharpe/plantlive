@@ -16,7 +16,7 @@ public class Summary {
     // private final String type;
 
     // When we last heard from the device
-    private final long latest;
+    private final Long latest;
 
     private final double temperature;
     private final double humidity;
@@ -41,7 +41,7 @@ public class Summary {
     @JsonCreator
     public Summary(
 //            @JsonProperty("type") String type,
-            @JsonProperty("latest") long latest,
+            @JsonProperty("latest") Long latest,
             @JsonProperty("temperature") double temperature,
             @JsonProperty("humidity") double humidity,
             @JsonProperty("light") double light,
@@ -62,7 +62,7 @@ public class Summary {
 //    }
 
     @JsonProperty("latest")
-    public long getLatest() {
+    public Long getLatest() {
         return latest;
     }
 

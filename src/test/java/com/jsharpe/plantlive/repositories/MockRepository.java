@@ -207,7 +207,7 @@ public class MockRepository {
             }
 
             if (plant == null) {
-                return new Summary(0, 0, 0, 0, 0);
+                return new Summary(null, 0, 0, 0, 0);
             }
 
             for (Detail detail : this.details) {

@@ -73,7 +73,7 @@ public class SqlDetailInRepositoryTest {
         SqlUtils.executeSeedSql(JDBI, SqlUtils.FIXTURES_ROOT + "simple.sql");
 
         // When
-        DETAIL_IN_REPOSITORY.save(4, new Date(), 20, 89, 32, 12);
+        DETAIL_IN_REPOSITORY.save(505, new Date(), 20, 89, 32, 12);
 
         // Then (exception)
     }
