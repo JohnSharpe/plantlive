@@ -26,7 +26,7 @@ From there, the output can migrate with Liquibase to get your tables into shape:
 `java -jar target/xyz.jar db status your-config.yml`  
 `java -jar target/xyz.jar db migrate your-config.yml`
 
-This will generate a normal Java jar.  
+This will run the application server.  
 `java -jar target/xyz.jar server your-config.yml`
 
 ## In
